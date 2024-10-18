@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SearchBar from "../Components/SearchBar";
@@ -310,6 +310,10 @@ export default function PatientListPage() {
   const [list,setList] = useState(originalList);
 
   // TODO: Fetch Patients
+  useEffect(() => {
+    // Show the sorted patient list when load this page
+    setList(sortPatientsByCondition([...originalList])); 
+  }, []);
 
   const filterPatients = (nameToSearch) => {
     if (nameToSearch == '') {

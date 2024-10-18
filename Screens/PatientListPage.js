@@ -14,6 +14,10 @@ export default function PatientListPage({ navigation }) {
       gender: 'Male',
       admissionDate: '2024-10-01',
       condition: 'Stable',
+      phone: '555-1234',
+      email: 'johndoe@example.com',
+      address: '123 Maple St, Toronto, ON',
+      emergencyContactPhone: '555-5678',
       clinicalData: [
         {
           type: 'Blood Pressure',
@@ -44,6 +48,10 @@ export default function PatientListPage({ navigation }) {
       gender: 'Female',
       admissionDate: '2024-09-20',
       condition: 'Critical',
+      phone: '555-2345',
+      email: 'janesmith@example.com',
+      address: '456 Oak St, Toronto, ON',
+      emergencyContactPhone: '555-6789',
       clinicalData: [
         {
           type: 'Blood Pressure',
@@ -74,6 +82,10 @@ export default function PatientListPage({ navigation }) {
       gender: 'Male',
       admissionDate: '2024-08-15',
       condition: 'Stable',
+      phone: '555-3456',
+      email: 'robertbrown@example.com',
+      address: '789 Pine St, Toronto, ON',
+      emergencyContactPhone: '555-7890',
       clinicalData: [
         {
           type: 'Blood Pressure',
@@ -104,6 +116,10 @@ export default function PatientListPage({ navigation }) {
       gender: 'Female',
       admissionDate: '2024-09-05',
       condition: 'Stable',
+      phone: '555-4567',
+      email: 'emilydavis@example.com',
+      address: '123 Birch St, Toronto, ON',
+      emergencyContactPhone: '555-8901',
       clinicalData: [
         {
           type: 'Blood Pressure',
@@ -134,6 +150,10 @@ export default function PatientListPage({ navigation }) {
       gender: 'Male',
       admissionDate: '2024-10-02',
       condition: 'Critical',
+      phone: '555-5678',
+      email: 'michaeljohnson@example.com',
+      address: '789 Cedar St, Toronto, ON',
+      emergencyContactPhone: '555-9012',
       clinicalData: [
         {
           type: 'Blood Pressure',
@@ -164,6 +184,10 @@ export default function PatientListPage({ navigation }) {
       gender: 'Female',
       admissionDate: '2024-09-18',
       condition: 'Stable',
+      phone: '555-6789',
+      email: 'oliviawilson@example.com',
+      address: '321 Spruce St, Toronto, ON',
+      emergencyContactPhone: '555-0123',
       clinicalData: [
         {
           type: 'Blood Pressure',
@@ -194,6 +218,10 @@ export default function PatientListPage({ navigation }) {
       gender: 'Male',
       admissionDate: '2024-09-30',
       condition: 'Critical',
+      phone: '555-7890',
+      email: 'liamthompson@example.com',
+      address: '654 Willow St, Toronto, ON',
+      emergencyContactPhone: '555-1234',
       clinicalData: [
         {
           type: 'Blood Pressure',
@@ -224,6 +252,10 @@ export default function PatientListPage({ navigation }) {
       gender: 'Female',
       admissionDate: '2024-08-25',
       condition: 'Stable',
+      phone: '555-8901',
+      email: 'sophiamartinez@example.com',
+      address: '987 Poplar St, Toronto, ON',
+      emergencyContactPhone: '555-2345',
       clinicalData: [
         {
           type: 'Blood Pressure',
@@ -254,6 +286,10 @@ export default function PatientListPage({ navigation }) {
       gender: 'Male',
       admissionDate: '2024-09-10',
       condition: 'Critical',
+      phone: '555-9012',
+      email: 'jamestaylor@example.com',
+      address: '111 Chestnut St, Toronto, ON',
+      emergencyContactPhone: '555-3456',
       clinicalData: [
         {
           type: 'Blood Pressure',
@@ -284,6 +320,10 @@ export default function PatientListPage({ navigation }) {
       gender: 'Female',
       admissionDate: '2024-09-22',
       condition: 'Stable',
+      phone: '555-0123',
+      email: 'isabellalee@example.com',
+      address: '222 Elm St, Toronto, ON',
+      emergencyContactPhone: '555-4567',
       clinicalData: [
         {
           type: 'Blood Pressure',

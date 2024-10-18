@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginPage from './Screens/LoginPage';
 import PatientListPage from './Screens/PatientListPage';
+import PatientDetailPage from './Screens/PatientDetailPage';
 
 const Stack = createStackNavigator();
 
@@ -12,7 +13,7 @@ export default function App() {
       <Stack.Navigator initialRouteName="Login">
         <Stack.Screen name="Login" component={LoginPage} options={{ headerShown: false }}  />
         <Stack.Screen name="Patient List" component={PatientListPage} />
-        <Stack.Screen name="Add Patient" component={PatientListPage} />
+        <Stack.Screen name="Patient Detail" component={PatientDetailPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );

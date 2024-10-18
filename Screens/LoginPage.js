@@ -32,7 +32,7 @@ export default function LoginPage({ navigation }) {
         </View>
         
         {/* Login Button */}
-        <TouchableOpacity style={styles.loginButton} onPress={() => navigation.navigate('PatientList')}>
+        <TouchableOpacity style={styles.loginButton} onPress={() => navigation.navigate('Patient List')}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
       </View>

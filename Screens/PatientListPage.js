@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import SearchBar from "../Components/SearchBar";
 
 export default function PatientListPage() {
@@ -331,13 +332,12 @@ export default function PatientListPage() {
       <View style={styles.row}>
       <Text style={styles.id}>ID: {item.id}</Text>
         <Text style={styles.name}>{item.name}</Text>
-        
-        {/* Edit Button */}
+
+        {/* Edit Icon */}
         <TouchableOpacity
-          style={styles.editButton}
-          onPress={() => navigation.navigate('PatientDetail', { patient: item })}
+          onPress={() => navigation.navigate('Patient Detail', { patient: item })}
         >
-          <Text style={styles.editButtonText}>Edit</Text>
+          <Icon name="edit" size={20} color="#007BFF" />
         </TouchableOpacity>
       </View>
     </View>
@@ -394,13 +394,5 @@ const styles = StyleSheet.create({
   },
   criticalRow: {
     backgroundColor: '#f8d7da',
-  },
-  editButton: {
-    backgroundColor: '#007BFF',
-    padding: 10,
-    borderRadius: 5,
-  },
-  editButtonText: {
-    color: '#fff',
   },
 });

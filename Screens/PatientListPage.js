@@ -352,6 +352,7 @@ export default function PatientListPage({ navigation }) {
     });
   };
 
+  // Render the row
   const renderItem = ({ item }) => (
     <View style={[styles.item, 
       item.condition === 'Critical' ? styles.criticalRow : styles.stableRow]}>
@@ -372,16 +373,21 @@ export default function PatientListPage({ navigation }) {
   return (
     <>
       <View style={styles.container}>
+        {/* Add Patient Icon */}
         <View style={styles.addPatientContainer}>
           <TouchableOpacity onPress={() => navigation.navigate('Add Patient')}>
             <Ionicons name="person-add" size={30} color="#007BFF" /> 
           </TouchableOpacity>
         </View>
+        
+        {/* Search bar */}
         <SearchBar term={searchTerm}
             onTermChange={(newTerm) => {
                 setSearchTerm(newTerm)
                 filterPatients(newTerm)
         }} />
+
+        {/* Show the patient list */}
         <FlatList
             data={list}
             keyExtractor={(item,i) => i}

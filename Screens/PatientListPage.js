@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import SearchBar from "../Components/SearchBar";
 
-export default function PatientListPage() {
+export default function PatientListPage({ navigation }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [originalList] = useState([
     {
@@ -371,6 +372,11 @@ export default function PatientListPage() {
   return (
     <>
       <View style={styles.container}>
+        <View style={styles.addPatientContainer}>
+          <TouchableOpacity onPress={() => navigation.navigate('Add Patient')}>
+            <Ionicons name="person-add" size={30} color="#007BFF" /> 
+          </TouchableOpacity>
+        </View>
         <SearchBar term={searchTerm}
             onTermChange={(newTerm) => {
                 setSearchTerm(newTerm)
@@ -391,6 +397,10 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: '#fff',
+  },
+  addPatientContainer: {
+    alignItems: 'flex-end',
+    marginBottom: 10,
   },
   item: {
     padding: 15,

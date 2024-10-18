@@ -5,7 +5,7 @@ import SearchBar from "../Components/SearchBar";
 
 export default function PatientListPage() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [list,setList] = useState([
+  const [originalList] = useState([
     {
       id: 1,
       name: 'John Doe',
@@ -307,24 +307,45 @@ export default function PatientListPage() {
       ],
     },
   ]);
+  const [list,setList] = useState(originalList);
 
   // TODO: Fetch Patients
 
   const filterPatients = (nameToSearch) => {
     if (nameToSearch == '') {
-        // The search term is empty
-        // TODO: Fetch Patients
-        return list;
+      // TODO: Fetch Patients
+
+      // If the search term is empty, reset it as the initial patient list and sort it
+      setList(sortPatientsByCondition([...originalList]));
     } else {
-        var resultList = list.filter((patient) => {
-            return patient.name == nameToSearch
-        })
-        
-        if (resultList.length > 0) {
-            setList(resultList);
-        }
+      // Convert the search term to lower case
+      const lowerCaseSearchTerm = nameToSearch.toLowerCase();
+
+      var resultList = originalList.filter((patient) => {
+        // Split the patient name to first name and last name
+        const [firstName, lastName] = patient.name.toLowerCase().split(' ');
+
+        // Check if the first name and last name match the search term
+        return firstName.includes(lowerCaseSearchTerm) || lastName.includes(lowerCaseSearchTerm);
+      })
+      
+      // Filter the list and sort it
+      setList(sortPatientsByCondition(resultList));
     }
   }
+
+  // Show the Critical status patients first, then stable patients
+  const sortPatientsByCondition = (patients) => {
+    return patients.sort((a, b) => {
+      if (a.condition === 'Critical' && b.condition !== 'Critical') {
+        return -1;
+      } else if (a.condition !== 'Critical' && b.condition === 'Critical') {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+  };
 
   const renderItem = ({ item }) => (
     <View style={[styles.item, 

@@ -17,7 +17,7 @@ export default function PatientDetailPage({ route, navigation }) {
 
     const handleAddMeasurement = (newMeasurement) => {
       console.log("New Measurement added: ", newMeasurement)
-      setClinicalData((prevData) => [...prevData, newMeasurement]); // Update clinical data
+      setClinicalData((prevData) => [newMeasurement, ...prevData]); // Update clinical data
   };
 
     return (

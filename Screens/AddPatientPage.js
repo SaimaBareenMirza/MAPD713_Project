@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {Text, TextInput, StyleSheet, View, Button, ScrollView} from "react-native";
-//import {Picker} from "react-native-picker/picker";
 import { Picker } from '@react-native-picker/picker';
 
 
@@ -47,7 +46,6 @@ export default function AddPatientPage ({route, navigation}) {
 
       };
 
-
     return (
         <ScrollView contentContainerStyle={style.scrollView}>
         <View>
@@ -66,6 +64,7 @@ export default function AddPatientPage ({route, navigation}) {
                 <TextInput placeholder="Enter Age" style={style.value} value={age} onChangeText={setAge} keyboardType="numeric"/>
             </View>
             
+            {/* Using picker to select the gender */}
             <View style={style.View}>
                 <Text style={style.label}>Gender:</Text>
                 <Picker selectedValue={gender} style={style.picker} onValueChange={(itemValue) => setGender(itemValue)}>
@@ -94,9 +93,11 @@ export default function AddPatientPage ({route, navigation}) {
                 <TextInput placeholder="Enter Address" style={style.value} value={address} onChangeText={setAddress}/>
             </View>        
             <Text style={style.label}>Medical History:</Text>
-            <TextInput value={medical} onChangeText={setMedical} style={style.value} multiline numberOfLines={5}/>
+            <TextInput value={medical} onChangeText={setMedical} style={style.medical} multiline numberOfLines={5}/>
+
             <Text style={style.label}>Allergies (if Any):</Text>
-            <TextInput value={allergy} onChangeText={setAllergy} style={style.value} multiline numberOfLines={3}/>
+            <TextInput value={allergy} onChangeText={setAllergy} style={style.medical} multiline numberOfLines={3}/>
+
             <View style={style.View}>
             <Text style={style.label}>Blood Type:</Text>
             <Picker selectedValue={BloodType} style={style.picker} onValueChange={(itemValue) => setBloodType(itemValue)}>
@@ -145,5 +146,8 @@ const style=StyleSheet.create({
         height: 40,
         marginHorizontal: 10,
       },
+      medical: {
+        fontSize: 14, 
+      }
 
 })

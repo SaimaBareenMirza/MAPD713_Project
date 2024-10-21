@@ -5,6 +5,7 @@ import LoginPage from './Screens/LoginPage';
 import PatientListPage from './Screens/PatientListPage';
 import PatientDetailPage from './Screens/PatientDetailPage';
 import AddPatientPage from './Screens/AddPatientPage';
+import AddMeasurementPage from './Screens/AddMeasurementPage';
 
 const Stack = createStackNavigator();
 
@@ -16,6 +17,7 @@ export default function App() {
         <Stack.Screen name="Patient List" component={PatientListPage} />
         <Stack.Screen name="Patient Detail" component={PatientDetailPage} />
         <Stack.Screen name="Add Patient" component={AddPatientPage} />
+        <Stack.Screen name = "Add Measurement" component={AddMeasurementPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );

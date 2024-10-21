@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 export default function PatientDetailPage({ route, navigation }) {
     // Get the patient data passed from the patient list page
     const { patient } = route.params;
+    const [clinicalData, setClinicalData] = useState(patient.clinicalData);
 
     const renderMeasurementItem = ({ item }) => (
         <View style={styles.measurementRow}>
@@ -13,6 +14,11 @@ export default function PatientDetailPage({ route, navigation }) {
             <Text style={styles.measurementCell}>{item.dateTime}</Text>
         </View>
     );
+
+    const handleAddMeasurement = (newMeasurement) => {
+      console.log("New Measurement added: ", newMeasurement)
+      setClinicalData((prevData) => [...prevData, newMeasurement]); // Update clinical data
+  };
 
     return (
         <View style={styles.container}>
@@ -80,7 +86,8 @@ export default function PatientDetailPage({ route, navigation }) {
                 <View style={styles.measurementHeaderContainer}>
                     <Text style={styles.measurementTitle}>Recent Measurements</Text>
                     {/* Add icon button */}
-                    <TouchableOpacity onPress={navigation.navigate('Add Measurement')}>
+                    <TouchableOpacity 
+                    onPress={() => navigation.navigate('Add Measurement', {addMeasurement: handleAddMeasurement})}>
                         <Icon name="add-circle-outline" size={30} color="#007BFF" />
                     </TouchableOpacity>
                 </View>
@@ -90,7 +97,7 @@ export default function PatientDetailPage({ route, navigation }) {
                     <Text style={styles.measurementHeaderCell}>Date/Time</Text>
                 </View>
                 <FlatList
-                    data={patient.clinicalData}
+                    data={clinicalData}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={renderMeasurementItem}
                 />

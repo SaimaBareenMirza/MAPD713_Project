@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LoginPage from './Screens/LoginPage';
 import PatientListPage from './Screens/PatientListPage';
 import PatientDetailPage from './Screens/PatientDetailPage';
+import AddPatientPage from './Screens/AddPatientPage';
 
 const Stack = createStackNavigator();
 
@@ -14,6 +15,7 @@ export default function App() {
         <Stack.Screen name="Login" component={LoginPage} options={{ headerShown: false }}  />
         <Stack.Screen name="Patient List" component={PatientListPage} />
         <Stack.Screen name="Patient Detail" component={PatientDetailPage} />
+        <Stack.Screen name="Add Patient" component={AddPatientPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );

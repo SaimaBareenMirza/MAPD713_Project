@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SearchBar from "../Components/SearchBar";
+import AddPatientPage from './AddPatientPage';
 
 export default function PatientListPage({ navigation }) {
   const [searchTerm, setSearchTerm] = useState('');
@@ -410,12 +411,18 @@ export default function PatientListPage({ navigation }) {
     </View>
   );
 
+  // Adding new patient to the list 
+  const addPatient = (newPatient) => {
+    setList((prevList) => sortPatientsByCondition([...prevList, newPatient]));
+  };
   return (
     <>
       <View style={styles.container}>
         {/* Add Patient Icon */}
         <View style={styles.addPatientContainer}>
-          <TouchableOpacity onPress={() => navigation.navigate('Add Patient')}>
+          <TouchableOpacity 
+          onPress={() => navigation.navigate('Add Patient', {lastPatientId: list.length > 0 ? list[list.length - 1].id : 0,  // lastPatientId will be 0 if list is empty
+            addPatient: addPatient})}>
             <Ionicons name="person-add" size={30} color="#007BFF" /> 
           </TouchableOpacity>
         </View>

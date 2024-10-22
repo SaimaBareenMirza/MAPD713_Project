@@ -15,7 +15,7 @@ export default function LoginPage({ navigation }) {
       <View style={styles.formContainer}>
         <Text style={styles.titleText}>Welcome</Text>
         <Text style={styles.text}>Sign into your Account</Text>
-        <TextInput style={styles.input} placeholder="Email" keyboardType="email-address" />
+        <TextInput style={styles.input} placeholder="Email" />
         <TextInput style={styles.input} placeholder="Password" secureTextEntry={true} />
         
         {/* Remember Me and Forgot Password */}

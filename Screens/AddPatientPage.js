@@ -1,153 +1,169 @@
-import React, { useState, useEffect } from "react";
-import {Text, TextInput, StyleSheet, View, Button, ScrollView} from "react-native";
+import React, { useState } from "react";
+import { Text, TextInput, StyleSheet, View, TouchableOpacity, ScrollView } from "react-native";
 import { Picker } from '@react-native-picker/picker';
+import { CheckBox } from 'react-native-elements';
 
-
-export default function AddPatientPage ({route, navigation}) {
-
-    const { lastPatientId, addPatient } = route.params; 
-    const [id, setId] = useState("");
-    const [name,setName] = useState("");
+export default function AddPatientPage({ navigation }) {
+    const [name, setName] = useState("");
     const [age, setAge] = useState("");
     const [gender, setGender] = useState("");
     const [phone, setPhone] = useState("");
     const [email, setEmail] = useState("");
     const [address, setAddress] = useState("");
-    const [emrgencyContact, setEmergencyContact] = useState("");
+    const [emergencyContact, setEmergencyContact] = useState("");
     const [medical, setMedical] = useState("");
     const [allergy, setAllergy] = useState("");
-    const [BloodType, setBloodType] = useState("");
+    const [bloodType, setBloodType] = useState("");
 
-    useEffect(() => {
-        setId(lastPatientId + 1);  // Increment the last patient’s ID by 1
-      }, [lastPatientId]);
+    const bloodTypes = ["O+", "O-", "A+", "A-", "B+", "B-", "AB+", "AB-"];
 
     const createNewPatient = () => {
-
-        const newPatient = {
-          id,
-          name,
-          age,
-          gender,
-          phone,
-          emrgencyContact,
-          email,
-          address,
-          medical,
-          allergy,
-          BloodType,
-        };
-      
-        // Call the addPatient function passed via route.params
-        route.params.addPatient(newPatient);
-      
-        // Navigate back to PatientListPage
+        // TODO: POST request
         navigation.goBack();
-
-      };
+        return;
+    };
 
     return (
-        <ScrollView contentContainerStyle={style.scrollView}>
-        <View>
-            <View style={style.View}>
-                <Text style={style.label}>Patient ID:</Text>
-                {/* Automatically display the ID */}
-                <TextInput style={style.value} value={id.toString()} editable={false} />
-            </View>
-            <View style={style.View}>
-                <Text style={style.label}>Full Name:</Text>
-                <TextInput placeholder="Enter Name" style={style.value} value={name} onChangeText={setName}/>
+        <ScrollView contentContainerStyle={styles.scrollView}>
+            {/* Name */}
+            <View style={styles.View}>
+                <Text style={styles.label}>Full Name:</Text>
+                <TextInput placeholder="Enter Name" style={styles.value} value={name} onChangeText={setName} />
             </View>
 
-            <View style={style.View}>
-                <Text style={style.label}>Age:</Text>
-                <TextInput placeholder="Enter Age" style={style.value} value={age} onChangeText={setAge} keyboardType="numeric"/>
-            </View>
-            
-            {/* Using picker to select the gender */}
-            <View style={style.View}>
-                <Text style={style.label}>Gender:</Text>
-                <Picker selectedValue={gender} style={style.picker} onValueChange={(itemValue) => setGender(itemValue)}>
-                    <Picker.Item label="Male" value="male" />
-                    <Picker.Item label="Female" value="female" />
-                    <Picker.Item label="Other" value="other" />
-                </Picker>
+            {/* Age */}
+            <View style={styles.View}>
+                <Text style={styles.label}>Age:</Text>
+                <TextInput placeholder="Enter Age" style={styles.value} value={age} onChangeText={setAge} keyboardType="numeric" />
             </View>
 
-            <View style={style.View}>
-                <Text style={style.label}>Phone Number:</Text>
-                <TextInput placeholder="Enter Number" style={style.value} value={phone} onChangeText={setPhone} keyboardType="phone-pad"/>
+            {/* Gender */}
+            <View style={styles.View}>
+                <Text style={styles.label}>Gender:</Text>
+                <View style={styles.radioContainer}>
+                    <CheckBox
+                        title="Male"
+                        checked={gender === "male"}
+                        onPress={() => setGender("male")}
+                        containerStyle={styles.checkbox}
+                    />
+                    <CheckBox
+                        title="Female"
+                        checked={gender === "female"}
+                        onPress={() => setGender("female")}
+                        containerStyle={styles.checkbox}
+                    />
+                    <CheckBox
+                        title="Other"
+                        checked={gender === "other"}
+                        onPress={() => setGender("other")}
+                        containerStyle={styles.checkbox}
+                    />
+                </View>
             </View>
 
-            <View style={style.View}>
-                <Text style={style.label}>Emergency Contact:</Text>
-                <TextInput placeholder="Enter" style={style.value} value={emrgencyContact} 
-                    onChangeText={setEmergencyContact} keyboardType="phone-pad"/>
-            </View>
-            <View style={style.View}>
-                <Text style={style.label}>Email:</Text>
-                <TextInput placeholder="Enter Email" style={style.value} value={email} onChangeText={setEmail}/>
-            </View>        
-           <View style={style.View}>
-                <Text style={style.label} >Address:</Text>
-                <TextInput placeholder="Enter Address" style={style.value} value={address} onChangeText={setAddress}/>
-            </View>        
-            <Text style={style.label}>Medical History:</Text>
-            <TextInput value={medical} onChangeText={setMedical} style={style.medical} multiline numberOfLines={5}/>
-
-            <Text style={style.label}>Allergies (if Any):</Text>
-            <TextInput value={allergy} onChangeText={setAllergy} style={style.medical} multiline numberOfLines={3}/>
-
-            <View style={style.View}>
-            <Text style={style.label}>Blood Type:</Text>
-            <Picker selectedValue={BloodType} style={style.picker} onValueChange={(itemValue) => setBloodType(itemValue)}>
-                    <Picker.Item label="O+" value="O+" />
-                    <Picker.Item label="O-" value="O-" />
-                    <Picker.Item label="A+" value="A+" />
-                    <Picker.Item label="A-" value="A-" />
-                    <Picker.Item label="B+" value="B+" />
-                    <Picker.Item label="B-" value="B-" />
-                    <Picker.Item label="AB+" value="AB+" />
-                    <Picker.Item label="AB-" value="AB-" />
-                </Picker>
+            {/* Phone number */}
+            <View style={styles.View}>
+                <Text style={styles.label}>Phone Number:</Text>
+                <TextInput placeholder="Enter Number" style={styles.value} value={phone} onChangeText={setPhone} keyboardType="phone-pad" />
             </View>
 
-            <Button title="Create" onPress={createNewPatient} />
-        </View>
+            {/* Emergency Contact */}
+            <View style={styles.View}>
+                <Text style={styles.label}>Emergency Contact:</Text>
+                <TextInput placeholder="Enter" style={styles.value} value={emergencyContact} onChangeText={setEmergencyContact} keyboardType="phone-pad" />
+            </View>
+
+            {/* Email */}
+            <View style={styles.View}>
+                <Text style={styles.label}>Email:</Text>
+                <TextInput placeholder="Enter Email" style={styles.value} value={email} onChangeText={setEmail} />
+            </View>
+
+            {/* Address */}
+            <View style={styles.View}>
+                <Text style={styles.label}>Address:</Text>
+                <TextInput placeholder="Enter Address" style={styles.value} value={address} onChangeText={setAddress} />
+            </View>
+
+            {/* Medical History */}
+            <Text style={styles.label}>Medical History:</Text>
+            <TextInput value={medical} onChangeText={setMedical} style={styles.medical} multiline numberOfLines={5} />
+
+            {/* Allergies */}
+            <Text style={styles.label}>Allergies (if Any):</Text>
+            <TextInput value={allergy} onChangeText={setAllergy} style={styles.medical} multiline numberOfLines={3} />
+
+            {/* Blood Type Dropdown */}
+            <Text style={styles.label}>Blood Type:</Text>
+            <Picker selectedValue={bloodType} style={styles.picker} onValueChange={(itemValue) => setBloodType(itemValue)} mode="dropdown">
+                {bloodTypes.map((type, index) => (
+                    <Picker.Item key={index} label={type} value={type} />
+                ))}
+            </Picker>
+
+            {/* Create Button */}
+            <TouchableOpacity style={styles.createButton} onPress={createNewPatient} >
+                <Text style={styles.buttonText}>Create</Text>
+            </TouchableOpacity>
         </ScrollView>
-
     );
 }
 
-const style=StyleSheet.create({
+const styles = StyleSheet.create({
     scrollView: {
         padding: 16,
-      },
+    },
     label: {
         fontSize: 16,
         fontWeight: 'bold',
         marginTop: 2,
-      },
+    },
     value: {
         fontSize: 14,
         marginTop: 2,
-        marginHorizontal: 10
-      },
+        marginHorizontal: 10,
+        flex: 1,
+    },
     View: {
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 10,
     },
-    multilineInput: {
-        textAlignVertical: 'top',
-    },
-      picker: {
+    picker: {
         flex: 1,
         height: 40,
         marginHorizontal: 10,
-      },
-      medical: {
-        fontSize: 14, 
-      }
-
-})
+    },
+    medical: {
+        fontSize: 14,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        padding: 10,
+        marginVertical: 10,
+        minHeight: 100,
+        width: '100%',
+        textAlignVertical: 'top',
+    },
+    radioContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginLeft: 10,
+    },
+    checkbox: {
+        backgroundColor: 'transparent',
+        borderWidth: 0,
+        padding: 0,
+    },
+    createButton: {
+        backgroundColor: '#007BFF',
+        padding: 10,
+        alignItems: 'center',
+        borderRadius: 5,
+        marginTop: 180,
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 16,
+    },
+});

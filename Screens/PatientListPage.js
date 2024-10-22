@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SearchBar from "../Components/SearchBar";
 
@@ -10,6 +10,7 @@ export default function PatientListPage({ navigation }) {
   const [originalList, setOriginalList] = useState([]);
   
   // Load data from database
+  // If it shows Error fetching patients: [TypeError: Network request failed], try changing localhost to IP
   useEffect(() => {
     fetch('http://localhost:3000/patients')
       .then((response) => response.json())
@@ -61,31 +62,26 @@ export default function PatientListPage({ navigation }) {
     <View style={[styles.item, 
       item.condition === 'Critical' ? styles.criticalRow : styles.stableRow]}>
       <View style={styles.row}>
-      <Text style={styles.id}>ID: {item.id}</Text>
+      <Text style={styles.id}>ID: {item.patientId}</Text>
         <Text style={styles.name}>{item.name}</Text>
 
         {/* Edit Icon */}
         <TouchableOpacity
           onPress={() => navigation.navigate('Patient Detail', { patient: item })}
         >
-          <Icon name="edit" size={20} color="#007BFF" />
+          <MaterialCommunityIcons name="account-details" size={20} color="#007BFF" />
         </TouchableOpacity>
       </View>
     </View>
   );
-
-  // Adding new patient to the list 
-  const addPatient = (newPatient) => {
-    setPatients((prevList) => sortPatientsByCondition([...prevList, newPatient]));
-  };
+  
   return (
     <>
       <View style={styles.container}>
         {/* Add Patient Icon */}
         <View style={styles.addPatientContainer}>
           <TouchableOpacity 
-          onPress={() => navigation.navigate('Add Patient', {lastPatientId: list.length > 0 ? list[list.length - 1].id : 0,  // lastPatientId will be 0 if list is empty
-            addPatient: addPatient})}>
+          onPress={() => navigation.navigate('Add Patient')}>
             <Ionicons name="person-add" size={30} color="#007BFF" /> 
           </TouchableOpacity>
         </View>

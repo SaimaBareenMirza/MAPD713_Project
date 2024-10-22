@@ -4,6 +4,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const Patient = require('./models/Patient');
+const User = require('./models/user');
+const bcrypt = require('bcrypt');
 
 const app = express();
 const PORT = 3000;
@@ -11,19 +13,50 @@ const PORT = 3000;
 app.use(cors());
 app.use(express.json());
 
-// MongoDB Connection
-mongoose.connect('mongodb://localhost:27017/patient_db', {
+// Connect to patient_db
+const patientDB = mongoose.createConnection('mongodb://localhost:27017/patient_db', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+const PatientModel = patientDB.model('Patient', Patient.schema);
 
 // Get all patients
 app.get('/patients', async (req, res) => {
   try {
-    const patients = await Patient.find();
+    const patients = await PatientModel.find();
     res.json(patients);
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+});
+
+// Connect to user_db
+const userDB = mongoose.createConnection('mongodb://localhost:27017/user_db', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+const UserModel = userDB.model('User', User.schema);
+
+app.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    // Search user
+    const user = await UserModel.findOne({ username });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid username" });
+    }
+
+    // Verify the password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid password" });
+    }
+
+    // Login successfully
+    return res.json({ message: "Login successful", user: { username: user.username, role: user.role } });
+  } catch (err) {
+    return res.status(500).json({ message: "Server error" });
   }
 });
 

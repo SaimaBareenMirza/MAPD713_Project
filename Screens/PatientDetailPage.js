@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
 export default function PatientDetailPage({ route, navigation }) {
   // Get the patient data passed from the patient list page
@@ -44,7 +45,18 @@ export default function PatientDetailPage({ route, navigation }) {
 
         {/* Display profile details */}
         <View style={styles.profileDetails}>
-          <Text style={styles.nameText}>{patient.name}</Text>
+          <View style={styles.nameRow}>
+            <Text style={styles.nameText}>{patient.name}</Text>
+            
+            {/* Edit icon */}
+            <TouchableOpacity 
+              onPress={() => navigation.navigate('Patient Edit', { patient })}
+              style={styles.editIconContainer}
+            >
+              <FontAwesomeIcon name="edit" size={24} color="#007BFF" />
+            </TouchableOpacity>
+          </View>
+
           <View style={styles.row}>
             <View style={styles.item}>
               <Text style={styles.label}>ID:</Text>
@@ -215,5 +227,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     flex: 1,
     textAlign: 'center',
+  },
+  nameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  editIconContainer: {
+    marginLeft: 10,
   },
 });

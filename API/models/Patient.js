@@ -13,6 +13,9 @@ const patientSchema = new mongoose.Schema({
   email: { type: String },
   address: { type: String },
   emergencyContactPhone: { type: String },
+  medicalHistory: { type: String, default: 'N/A' },
+  allergies: { type: String, default: 'N/A' },
+  bloodType: { type: String, default: 'N/A' },
 });
 
 module.exports = mongoose.model('Patient', patientSchema);

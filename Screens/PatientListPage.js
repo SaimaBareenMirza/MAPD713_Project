@@ -3,21 +3,358 @@ import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SearchBar from "../Components/SearchBar";
+import AddPatientPage from './AddPatientPage';
 
 export default function PatientListPage({ navigation }) {
   const [searchTerm, setSearchTerm] = useState('');
-  const [patients, setPatients] = useState([]);
-  const [originalList, setOriginalList] = useState([]);
-  
-  // Load data from database
+  const [originalList] = useState([
+    {
+      id: 1,
+      name: 'John Doe',
+      age: 65,
+      gender: 'Male',
+      admissionDate: '2024-10-01',
+      condition: 'Stable',
+      phone: '555-1234',
+      email: 'johndoe@example.com',
+      address: '123 Maple St, Toronto, ON',
+      emergencyContactPhone: '555-5678',
+      clinicalData: [
+        {
+          type: 'Blood Pressure',
+          value: '120/80 mmHg',
+          dateTime: '2024-10-10 08:00',
+        },
+        {
+          type: 'Respiratory Rate',
+          value: '16/min',
+          dateTime: '2024-10-10 08:00',
+        },
+        {
+          type: 'Blood Oxygen Level',
+          value: '98%',
+          dateTime: '2024-10-10 08:00',
+        },
+        {
+          type: 'Heartbeat Rate',
+          value: '72/min',
+          dateTime: '2024-10-10 08:00',
+        },
+      ],
+    },
+    {
+      id: 2,
+      name: 'Jane Smith',
+      age: 58,
+      gender: 'Female',
+      admissionDate: '2024-09-20',
+      condition: 'Critical',
+      phone: '555-2345',
+      email: 'janesmith@example.com',
+      address: '456 Oak St, Toronto, ON',
+      emergencyContactPhone: '555-6789',
+      clinicalData: [
+        {
+          type: 'Blood Pressure',
+          value: '90/60 mmHg',
+          dateTime: '2024-10-10 08:00',
+        },
+        {
+          type: 'Respiratory Rate',
+          value: '20/min',
+          dateTime: '2024-10-10 08:00',
+        },
+        {
+          type: 'Blood Oxygen Level',
+          value: '85%',
+          dateTime: '2024-10-10 08:00',
+        },
+        {
+          type: 'Heartbeat Rate',
+          value: '110/min',
+          dateTime: '2024-10-10 08:00',
+        },
+      ],
+    },
+    {
+      id: 3,
+      name: 'Robert Brown',
+      age: 72,
+      gender: 'Male',
+      admissionDate: '2024-08-15',
+      condition: 'Stable',
+      phone: '555-3456',
+      email: 'robertbrown@example.com',
+      address: '789 Pine St, Toronto, ON',
+      emergencyContactPhone: '555-7890',
+      clinicalData: [
+        {
+          type: 'Blood Pressure',
+          value: '130/85 mmHg',
+          dateTime: '2024-10-10 08:00',
+        },
+        {
+          type: 'Respiratory Rate',
+          value: '18/min',
+          dateTime: '2024-10-10 08:00',
+        },
+        {
+          type: 'Blood Oxygen Level',
+          value: '96%',
+          dateTime: '2024-10-10 08:00',
+        },
+        {
+          type: 'Heartbeat Rate',
+          value: '75/min',
+          dateTime: '2024-10-10 08:00',
+        },
+      ],
+    },
+    {
+      id: 4,
+      name: 'Emily Davis',
+      age: 45,
+      gender: 'Female',
+      admissionDate: '2024-09-05',
+      condition: 'Stable',
+      phone: '555-4567',
+      email: 'emilydavis@example.com',
+      address: '123 Birch St, Toronto, ON',
+      emergencyContactPhone: '555-8901',
+      clinicalData: [
+        {
+          type: 'Blood Pressure',
+          value: '110/70 mmHg',
+          dateTime: '2024-10-10 08:00',
+        },
+        {
+          type: 'Respiratory Rate',
+          value: '15/min',
+          dateTime: '2024-10-10 08:00',
+        },
+        {
+          type: 'Blood Oxygen Level',
+          value: '97%',
+          dateTime: '2024-10-10 08:00',
+        },
+        {
+          type: 'Heartbeat Rate',
+          value: '68/min',
+          dateTime: '2024-10-10 08:00',
+        },
+      ],
+    },
+    {
+      id: 5,
+      name: 'Michael Johnson',
+      age: 50,
+      gender: 'Male',
+      admissionDate: '2024-10-02',
+      condition: 'Critical',
+      phone: '555-5678',
+      email: 'michaeljohnson@example.com',
+      address: '789 Cedar St, Toronto, ON',
+      emergencyContactPhone: '555-9012',
+      clinicalData: [
+        {
+          type: 'Blood Pressure',
+          value: '85/55 mmHg',
+          dateTime: '2024-10-10 08:00',
+        },
+        {
+          type: 'Respiratory Rate',
+          value: '22/min',
+          dateTime: '2024-10-10 08:00',
+        },
+        {
+          type: 'Blood Oxygen Level',
+          value: '82%',
+          dateTime: '2024-10-10 08:00',
+        },
+        {
+          type: 'Heartbeat Rate',
+          value: '115/min',
+          dateTime: '2024-10-10 08:00',
+        },
+      ],
+    },
+    {
+      id: 6,
+      name: 'Olivia Wilson',
+      age: 45,
+      gender: 'Female',
+      admissionDate: '2024-09-18',
+      condition: 'Stable',
+      phone: '555-6789',
+      email: 'oliviawilson@example.com',
+      address: '321 Spruce St, Toronto, ON',
+      emergencyContactPhone: '555-0123',
+      clinicalData: [
+        {
+          type: 'Blood Pressure',
+          value: '118/78 mmHg',
+          dateTime: '2024-10-10 09:00',
+        },
+        {
+          type: 'Respiratory Rate',
+          value: '18/min',
+          dateTime: '2024-10-10 09:00',
+        },
+        {
+          type: 'Blood Oxygen Level',
+          value: '98%',
+          dateTime: '2024-10-10 09:00',
+        },
+        {
+          type: 'Heartbeat Rate',
+          value: '72/min',
+          dateTime: '2024-10-10 09:00',
+        },
+      ],
+    },
+    {
+      id: 7,
+      name: 'Liam Thompson',
+      age: 62,
+      gender: 'Male',
+      admissionDate: '2024-09-30',
+      condition: 'Critical',
+      phone: '555-7890',
+      email: 'liamthompson@example.com',
+      address: '654 Willow St, Toronto, ON',
+      emergencyContactPhone: '555-1234',
+      clinicalData: [
+        {
+          type: 'Blood Pressure',
+          value: '90/55 mmHg',
+          dateTime: '2024-10-10 10:00',
+        },
+        {
+          type: 'Respiratory Rate',
+          value: '24/min',
+          dateTime: '2024-10-10 10:00',
+        },
+        {
+          type: 'Blood Oxygen Level',
+          value: '82%',
+          dateTime: '2024-10-10 10:00',
+        },
+        {
+          type: 'Heartbeat Rate',
+          value: '115/min',
+          dateTime: '2024-10-10 10:00',
+        },
+      ],
+    },
+    {
+      id: 8,
+      name: 'Sophia Martinez',
+      age: 53,
+      gender: 'Female',
+      admissionDate: '2024-08-25',
+      condition: 'Stable',
+      phone: '555-8901',
+      email: 'sophiamartinez@example.com',
+      address: '987 Poplar St, Toronto, ON',
+      emergencyContactPhone: '555-2345',
+      clinicalData: [
+        {
+          type: 'Blood Pressure',
+          value: '125/80 mmHg',
+          dateTime: '2024-10-10 11:00',
+        },
+        {
+          type: 'Respiratory Rate',
+          value: '17/min',
+          dateTime: '2024-10-10 11:00',
+        },
+        {
+          type: 'Blood Oxygen Level',
+          value: '96%',
+          dateTime: '2024-10-10 11:00',
+        },
+        {
+          type: 'Heartbeat Rate',
+          value: '70/min',
+          dateTime: '2024-10-10 11:00',
+        },
+      ],
+    },
+    {
+      id: 9,
+      name: 'James Taylor',
+      age: 70,
+      gender: 'Male',
+      admissionDate: '2024-09-10',
+      condition: 'Critical',
+      phone: '555-9012',
+      email: 'jamestaylor@example.com',
+      address: '111 Chestnut St, Toronto, ON',
+      emergencyContactPhone: '555-3456',
+      clinicalData: [
+        {
+          type: 'Blood Pressure',
+          value: '85/50 mmHg',
+          dateTime: '2024-10-10 12:00',
+        },
+        {
+          type: 'Respiratory Rate',
+          value: '22/min',
+          dateTime: '2024-10-10 12:00',
+        },
+        {
+          type: 'Blood Oxygen Level',
+          value: '80%',
+          dateTime: '2024-10-10 12:00',
+        },
+        {
+          type: 'Heartbeat Rate',
+          value: '120/min',
+          dateTime: '2024-10-10 12:00',
+        },
+      ],
+    },
+    {
+      id: 10,
+      name: 'Isabella Lee',
+      age: 58,
+      gender: 'Female',
+      admissionDate: '2024-09-22',
+      condition: 'Stable',
+      phone: '555-0123',
+      email: 'isabellalee@example.com',
+      address: '222 Elm St, Toronto, ON',
+      emergencyContactPhone: '555-4567',
+      clinicalData: [
+        {
+          type: 'Blood Pressure',
+          value: '115/75 mmHg',
+          dateTime: '2024-10-10 13:00',
+        },
+        {
+          type: 'Respiratory Rate',
+          value: '16/min',
+          dateTime: '2024-10-10 13:00',
+        },
+        {
+          type: 'Blood Oxygen Level',
+          value: '97%',
+          dateTime: '2024-10-10 13:00',
+        },
+        {
+          type: 'Heartbeat Rate',
+          value: '68/min',
+          dateTime: '2024-10-10 13:00',
+        },
+      ],
+    },
+  ]);
+  const [list,setList] = useState(originalList);
+
+  // TODO: Fetch Patients
   useEffect(() => {
-    fetch('http://localhost:3000/patients')
-      .then((response) => response.json())
-      .then((data) => {
-        setPatients(sortPatientsByCondition([...data]));
-        setOriginalList(sortPatientsByCondition([...data]));
-      })
-      .catch((error) => console.error('Error fetching patients:', error));
+    // Show the sorted patient list when load this page
+    setList(sortPatientsByCondition([...originalList])); 
   }, []);
 
   const filterPatients = (nameToSearch) => {
@@ -25,7 +362,7 @@ export default function PatientListPage({ navigation }) {
       // TODO: Fetch Patients
 
       // If the search term is empty, reset it as the initial patient list and sort it
-      setPatients(sortPatientsByCondition([...originalList]));
+      setList(sortPatientsByCondition([...originalList]));
     } else {
       // Convert the search term to lower case
       const lowerCaseSearchTerm = nameToSearch.toLowerCase();
@@ -39,7 +376,7 @@ export default function PatientListPage({ navigation }) {
       })
       
       // Filter the list and sort it
-      setPatients(sortPatientsByCondition(resultList));
+      setList(sortPatientsByCondition(resultList));
     }
   }
 
@@ -76,7 +413,7 @@ export default function PatientListPage({ navigation }) {
 
   // Adding new patient to the list 
   const addPatient = (newPatient) => {
-    setPatients((prevList) => sortPatientsByCondition([...prevList, newPatient]));
+    setList((prevList) => sortPatientsByCondition([...prevList, newPatient]));
   };
   return (
     <>
@@ -99,7 +436,7 @@ export default function PatientListPage({ navigation }) {
 
         {/* Show the patient list */}
         <FlatList
-            data={patients}
+            data={list}
             keyExtractor={(item,i) => i}
             renderItem={renderItem}
         />

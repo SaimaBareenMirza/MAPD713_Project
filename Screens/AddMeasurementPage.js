@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Text, TextInput, StyleSheet, View, Button } from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker"; 
 import { Picker } from '@react-native-picker/picker';
 
 export default function AddMeasurementPage({ route, navigation }) {
@@ -7,6 +8,9 @@ export default function AddMeasurementPage({ route, navigation }) {
     const [test, setTest] = useState("");
     const [value1, setValue1] = useState(""); 
     const [value2, setValue2] = useState(""); 
+    const [date, setDate] = useState(new Date());
+    const [show, setShow] = useState(false);
+    const [mode, setMode] = useState('date');
 
     const renderInputFields = () => {
         switch (test) {
@@ -70,16 +74,34 @@ export default function AddMeasurementPage({ route, navigation }) {
         }
     };
 
-    const handleSubmit = () => {
-        const dateTime = new Date().toLocaleString(); // Get current date/time
+    {const handleSubmit = () => {
+        const unit = test === "Blood Pressure" ? "mmHg" : 
+                     test === "Respiratory Rate" ? "breaths/min" : 
+                     test === "HeartBeat Rate" ? "bpm" : 
+                     test === "Blood Oxygen Level" ? "%" : "";
+
+        
         const newMeasurement = {
             type: test,
             value: test === "Blood Pressure" ? `${value1}/${value2}` : value1,
-            dateTime: dateTime,
+            unit: unit,
+            dateTime: date.toLocaleString(),
         };
         addMeasurement(newMeasurement); 
         navigation.goBack(); 
     };
+    
+
+    //To set date and time
+    const onChange = (e, selectedDate) => {
+        setDate(selectedDate);
+        setShow(false);
+      };
+    
+      const showMode =(modeToShow) => {
+        setShow(true);
+        setMode(modeToShow);
+      }
 
     return (
         <View style={style.container}>
@@ -97,10 +119,27 @@ export default function AddMeasurementPage({ route, navigation }) {
             </Picker>
 
             {renderInputFields()}
+            <View style={style.DateTime}>
+            <Button title="Show date" onPress={() => showMode("date")} />
+            <Button title="Show time" onPress={() => showMode("time")} />
+        {
+          show && (
+            <DateTimePicker 
+              value={date}
+              mode={mode}
+              is24Hour={true}
+              onChange={onChange}
+            />
+          )
+        }
+        
+            </View>
+            <Text style={style.dateTimeText}>{date.toLocaleString()}</Text>
 
             <Button title="Submit Measurement" onPress={handleSubmit} />
         </View>
     ); 
+}
 }
 
 const style = StyleSheet.create({
@@ -123,4 +162,17 @@ const style = StyleSheet.create({
         marginBottom: 10,
         borderRadius: 5,
     },
+    DateTime: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between'
+    },
+    button: {
+        backgroundColor: 'grey',
+        padding: 'auto'
+    },
+    dateTimeText: {
+        marginVertical: '20', 
+        margin: 20
+    }
 });

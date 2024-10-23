@@ -38,13 +38,13 @@ const userDB = mongoose.createConnection('mongodb://localhost:27017/user_db', {
 const UserModel = userDB.model('User', User.schema);
 
 app.post('/login', async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
   try {
     // Search user
-    const user = await UserModel.findOne({ username });
+    const user = await UserModel.findOne({ email });
     if (!user) {
-      return res.status(400).json({ message: "Invalid username" });
+      return res.status(400).json({ message: "Invalid email" });
     }
 
     // Verify the password
@@ -54,7 +54,7 @@ app.post('/login', async (req, res) => {
     }
 
     // Login successfully
-    return res.json({ message: "Login successful", user: { username: user.username, role: user.role } });
+    return res.json({ message: "Login successful", user: { email: user.email, role: user.role } });
   } catch (err) {
     return res.status(500).json({ message: "Server error" });
   }

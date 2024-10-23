@@ -20,7 +20,7 @@ export default function LoginPage({ navigation }) {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ username: email, password })
+      body: JSON.stringify({ email: email, password })
     })
     .then(response => response.json())
     .then(data => {

@@ -62,10 +62,10 @@ export default function PatientListPage({ navigation }) {
     <View style={[styles.item, 
       item.condition === 'Critical' ? styles.criticalRow : styles.stableRow]}>
       <View style={styles.row}>
-      <Text style={styles.id}>ID: {item.patientId}</Text>
+        <Text style={styles.id}>{item.patientId}</Text>
         <Text style={styles.name}>{item.name}</Text>
 
-        {/* Edit Icon */}
+        {/* Detail Icon */}
         <TouchableOpacity
           onPress={() => navigation.navigate('Patient Detail', { patient: item })}
         >

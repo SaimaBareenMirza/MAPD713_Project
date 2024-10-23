@@ -5,7 +5,6 @@ import { CheckBox } from 'react-native-elements';
 
 export default function PatientEditPage({ route, navigation }) {
     const { patient } = route.params;
-    console.log(patient.bloodType);
     
     const [name, setName] = useState(patient.name);
     const [age, setAge] = useState(patient.age ? patient.age.toString() : "");

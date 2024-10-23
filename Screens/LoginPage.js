@@ -1,11 +1,40 @@
-
 import * as React from 'react';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 
 export default function LoginPage({ navigation }) {
   // Set remember me as false
   const [rememberMe, setRememberMe] = React.useState(false);
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+
+  const handleLogin = () => {
+    if (email === '' || password === '') {
+      Alert.alert("Error", "Please enter both email and password");
+      return;
+    }
+
+    // Authentication
+    fetch('http://localhost:3000/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email: email, password })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.message === "Login successful") {
+        navigation.navigate('Patient List');
+      } else {
+        Alert.alert("Error", data.message);
+      }
+    })
+    .catch(error => {
+      console.error('Error during login:', error);
+      Alert.alert("Error", "An error occurred during login");
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -16,8 +45,8 @@ export default function LoginPage({ navigation }) {
       <View style={styles.formContainer}>
         <Text style={styles.titleText}>Welcome</Text>
         <Text style={styles.text}>Sign into your Account</Text>
-        <TextInput style={styles.input} placeholder="Email" />
-        <TextInput style={styles.input} placeholder="Password" secureTextEntry={true} />
+        <TextInput style={styles.input} placeholder="Email" onChangeText={setEmail} />
+        <TextInput style={styles.input} placeholder="Password" secureTextEntry={true} onChangeText={setPassword} />
         
         {/* Remember Me and Forgot Password */}
         <View style={styles.rememberForgotContainer}>
@@ -27,13 +56,13 @@ export default function LoginPage({ navigation }) {
             onPress={() => setRememberMe(!rememberMe)}
             containerStyle={styles.checkboxContainer}
           />
-          <TouchableOpacity onPress={() => alert('Forgot Password Pressed')}>
+          <TouchableOpacity onPress={() => navigation.navigate('Forgot Password')}>
             <Text style={styles.forgotPasswordText}>Forgot password?</Text>
           </TouchableOpacity>
         </View>
         
         {/* Login Button */}
-        <TouchableOpacity style={styles.loginButton} onPress={() => navigation.navigate('Patient List')}>
+        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
       </View>

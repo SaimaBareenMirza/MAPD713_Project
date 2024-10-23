@@ -17,14 +17,14 @@ export default function AddMeasurementPage({ route, navigation }) {
             case "Blood Pressure":
                 return (
                     <View>
-                        <Text>Enter Systolic Value:</Text>
+                        <Text>Enter Sys Value:</Text>
                         <TextInput 
                             style={style.input} 
                             value={value1} 
                             onChangeText={setValue1} 
                             keyboardType="numeric"
                         />
-                        <Text>Enter Diastolic Value:</Text>
+                        <Text>Enter Dia Value:</Text>
                         <TextInput 
                             style={style.input} 
                             value={value2} 
@@ -134,10 +134,11 @@ export default function AddMeasurementPage({ route, navigation }) {
         }
         
             </View>
+            <Text style={style.label}>Date, Time:</Text>
             {/* showing the current date and time*/} 
             <Text style={style.dateTimeText}>{date.toLocaleString()}</Text>
 
-            <Button title="Submit Measurement" onPress={handleSubmit} />
+            <Button title="Submit Measurement" onPress={handleSubmit} style={style.button}/>
         </View>
     ); 
 }
@@ -148,7 +149,7 @@ const style = StyleSheet.create({
         padding: 20,
     },
     label: {
-        marginBottom: 10,
+        fontSize: 16,
         fontWeight: 'bold',
     },
     picker: {
@@ -166,14 +167,14 @@ const style = StyleSheet.create({
     DateTime: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        marginBottom: 20
     },
     button: {
-        backgroundColor: 'grey',
-        padding: 'auto'
+        color: '#fff',
+        fontSize: 16,
     },
     dateTimeText: {
-        marginVertical: '20', 
-        margin: 20
+        margin: 10
     }
 });

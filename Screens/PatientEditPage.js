@@ -128,7 +128,7 @@ export default function PatientEditPage({ route, navigation }) {
 
             {/* Create Button */}
             <TouchableOpacity style={styles.createButton} onPress={createNewPatient} >
-                <Text style={styles.buttonText}>Create</Text>
+                <Text style={styles.buttonText}>Submit</Text>
             </TouchableOpacity>
         </ScrollView>
     );

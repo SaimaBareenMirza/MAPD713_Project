@@ -56,7 +56,7 @@ export default function LoginPage({ navigation }) {
             onPress={() => setRememberMe(!rememberMe)}
             containerStyle={styles.checkboxContainer}
           />
-          <TouchableOpacity onPress={() => alert('Forgot Password Pressed')}>
+          <TouchableOpacity onPress={() => navigation.navigate('Forgot Password')}>
             <Text style={styles.forgotPasswordText}>Forgot password?</Text>
           </TouchableOpacity>
         </View>

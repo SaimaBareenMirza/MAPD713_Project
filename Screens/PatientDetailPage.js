@@ -6,7 +6,9 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 export default function PatientDetailPage({ route, navigation }) {
   // Get the patient data passed from the patient list page
   const { patient } = route.params;
-  const [clinicalData, setClinicalData] = useState(patient.clinicalData);
+
+  // TODO: Fetch clinical data from DB
+  const [clinicalData, setClinicalData] = useState("");
 
   const renderMeasurementItem = ({ item }) => (
     <View style={styles.measurementRow}>
@@ -26,11 +28,6 @@ export default function PatientDetailPage({ route, navigation }) {
     
     // Return YYYY-MM-DD format
     return `${year}-${month}-${day}`;
-  };
-
-  const handleAddMeasurement = (newMeasurement) => {
-    console.log("New Measurement added: ", newMeasurement)
-    setClinicalData((prevData) => [newMeasurement, ...prevData]); // Update clinical data
   };
 
   return (
@@ -111,7 +108,7 @@ export default function PatientDetailPage({ route, navigation }) {
           <Text style={styles.measurementTitle}>Recent Measurements</Text>
           {/* Add icon button */}
           <TouchableOpacity 
-          onPress={() => navigation.navigate('Add Measurement', {addMeasurement: handleAddMeasurement})}>
+          onPress={() => navigation.navigate('Add Measurement')}>
               <Icon name="add-circle-outline" size={30} color="#007BFF" />
           </TouchableOpacity>
         </View>

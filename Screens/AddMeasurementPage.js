@@ -1,72 +1,53 @@
 import React, { useState } from "react";
-import { Text, TextInput, StyleSheet, View, Button } from "react-native";
+import { Text, TextInput, StyleSheet, View, Button, TouchableOpacity } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker"; 
 import { Picker } from '@react-native-picker/picker';
 
-export default function AddMeasurementPage({ route, navigation }) {
-    const { addMeasurement } = route.params; // Get the function passed from PatientDetailPage
-    const [test, setTest] = useState("");
-    const [value1, setValue1] = useState(""); 
-    const [value2, setValue2] = useState(""); 
-    const [date, setDate] = useState(new Date());
-    const [show, setShow] = useState(false);
-    const [mode, setMode] = useState('date');
+export default function AddMeasurementPage({ navigation }) {
+    const [ test, setTest ] = useState("");
+    const [ value1, setValue1 ] = useState(""); 
+    const [ value2, setValue2 ] = useState(""); 
+    const [ date, setDate ] = useState(new Date());
 
     const renderInputFields = () => {
         switch (test) {
             case "Blood Pressure":
                 return (
-                    <View>
-                        <Text>Enter Sys Value:</Text>
-                        <TextInput 
-                            style={style.input} 
-                            value={value1} 
-                            onChangeText={setValue1} 
-                            keyboardType="numeric"
-                        />
-                        <Text>Enter Dia Value:</Text>
-                        <TextInput 
-                            style={style.input} 
-                            value={value2} 
-                            onChangeText={setValue2} 
-                            keyboardType="numeric"
-                        />
-                        <Text>Unit: mmHg</Text>
-                    </View>
+                    <>
+                        <View style={styles.View}>
+                            <Text style={styles.label}>Enter Sys Value:</Text>
+                            <TextInput placeholder="Enter Sys Value" style={styles.value} value={value1} onChangeText={setValue1} keyboardType="numeric" />
+                            <Text style={styles.unit}>{"(Unit: mmHg)"}</Text>
+                        </View>
+                        <View style={styles.View}>
+                            <Text style={styles.label}>Enter Dia Value:</Text>
+                            <TextInput placeholder="Enter Dia Value" style={styles.value} value={value2} onChangeText={setValue2} keyboardType="numeric" />
+                            <Text style={styles.unit}>{"(Unit: mmHg)"}</Text>
+                        </View>
+                    </>
                 );
             case "Respiratory Rate":
                 return (
-                    <View>
-                        <Text>Enter Value:</Text>
-                        <TextInput 
-                            style={style.input} 
-                            value={value1} 
-                            onChangeText={setValue1} 
-                            keyboardType="numeric"
-                        />
-                        <Text>Unit: breaths/min</Text>
+                    <View style={styles.View}>
+                        <Text style={styles.label}>Enter Value:</Text>
+                        <TextInput placeholder="Enter Value" style={styles.value} value={value1} onChangeText={setValue1} keyboardType="numeric" />
+                        <Text style={styles.unit}>{"(Unit: breaths/min)"}</Text>
                     </View>
                 );
             case "HeartBeat Rate":
                 return (
-                    <View>
-                        <Text>Enter Value:</Text>
-                        <TextInput 
-                            style={style.input} value={value1} onChangeText={setValue1} keyboardType="numeric"/>
-                        <Text>Unit: bpm</Text>
+                    <View style={styles.View}>
+                        <Text style={styles.label}>Enter Value:</Text>
+                        <TextInput placeholder="Enter Value" style={styles.value} value={value1} onChangeText={setValue1} keyboardType="numeric" />
+                        <Text style={styles.unit}>{"(Unit: bpm)"}</Text>
                     </View>
                 );
             case "Blood Oxygen Level":
                 return (
-                    <View>
-                        <Text>Enter Value:</Text>
-                        <TextInput 
-                            style={style.input} 
-                            value={value1} 
-                            onChangeText={setValue1} 
-                            keyboardType="numeric"
-                        />
-                        <Text>Unit: %</Text>
+                    <View style={styles.View}>
+                        <Text style={styles.label}>Enter Value:</Text>
+                        <TextInput placeholder="Enter Value" style={styles.value} value={value1} onChangeText={setValue1} keyboardType="numeric" />
+                        <Text style={styles.unit}>{"(Unit: %)"}</Text>
                     </View>
                 );
             default:
@@ -74,7 +55,9 @@ export default function AddMeasurementPage({ route, navigation }) {
         }
     };
 
-    {const handleSubmit = () => {
+    const handleSubmit = () => {
+        // TODO: Implement a POST request to submit measurement data
+        /*
         const unit = test === "Blood Pressure" ? "mmHg" : 
                      test === "Respiratory Rate" ? "breaths/min" : 
                      test === "HeartBeat Rate" ? "bpm" : 
@@ -86,27 +69,21 @@ export default function AddMeasurementPage({ route, navigation }) {
             value: test === "Blood Pressure" ? `${value1}/${value2}` : value1,
             unit: unit,
             dateTime: date.toLocaleString(),
-        };
-        addMeasurement(newMeasurement); 
+        }; */
+        
         navigation.goBack(); 
     };
     
 
-    //To set date and time
+    // To set date and time
     const onChange = (e, selectedDate) => {
         setDate(selectedDate);
-        setShow(false);
-      };
-    
-      const showMode =(modeToShow) => {
-        setShow(true);
-        setMode(modeToShow);
-      }
+    };
 
     return (
-        <View style={style.container}>
-            <Text style={style.label}>Select Test:</Text>
-            <Picker selectedValue={test} style={style.picker} onValueChange={(itemValue) => {
+        <View style={styles.container}>
+            <Text style={styles.label}>Select Test:</Text>
+            <Picker selectedValue={test} style={styles.picker} onValueChange={(itemValue) => {
                 setTest(itemValue);
                 setValue1(''); // Reset values on test change
                 setValue2('');
@@ -119,32 +96,34 @@ export default function AddMeasurementPage({ route, navigation }) {
             </Picker>
 
             {renderInputFields()}
-            <View style={style.DateTime}>
-            <Button title="Show date" onPress={() => showMode("date")} />
-            <Button title="Show time" onPress={() => showMode("time")} />
-        {
-          show && (
-            <DateTimePicker 
-              value={date}
-              mode={mode}
-              is24Hour={true}
-              onChange={onChange}
-            />
-          )
-        }
+            <View style={styles.DateTime}>
+                <Text style={styles.label}>Test Time:</Text>
+                <DateTimePicker 
+                    value={date}
+                    mode={"date"}
+                    is24Hour={true}
+                    onChange={onChange}
+                />
+                <DateTimePicker 
+                    value={date}
+                    mode={"time"}
+                    is24Hour={true}
+                    onChange={onChange}
+                />
         
             </View>
-            <Text style={style.label}>Date, Time:</Text>
-            {/* showing the current date and time*/} 
-            <Text style={style.dateTimeText}>{date.toLocaleString()}</Text>
 
-            <Button title="Submit Measurement" onPress={handleSubmit} style={style.button}/>
+            <TouchableOpacity 
+                onPress={handleSubmit}
+                style={styles.button}
+            >
+                <Text style={styles.buttonText}>Submit Measurement</Text>
+            </TouchableOpacity>
         </View>
     ); 
 }
-}
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
         padding: 20,
     },
@@ -155,22 +134,35 @@ const style = StyleSheet.create({
     picker: {
         height: 50,
         width: '100%',
-        marginBottom: 20,
+        marginBottom: 150,
     },
-    input: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        padding: 10,
-        marginBottom: 10,
-        borderRadius: 5,
+    value: {
+        fontSize: 14,
+        marginTop: 2,
+        marginHorizontal: 10,
+        flex: 1,
+    },
+    unit: {
+        fontSize: 14,
+    },
+    View: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginVertical: 10,
     },
     DateTime: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginBottom: 20
+        marginVertical: 20
     },
     button: {
+        backgroundColor: '#007BFF',
+        padding: 10,
+        alignItems: 'center',
+        borderRadius: 5,
+    },
+    buttonText: {
         color: '#fff',
         fontSize: 16,
     },

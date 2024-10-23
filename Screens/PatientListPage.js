@@ -1,13 +1,13 @@
+
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SearchBar from "../Components/SearchBar";
 import AddPatientPage from './AddPatientPage';
 
 export default function PatientListPage({ navigation }) {
   const [searchTerm, setSearchTerm] = useState('');
-<<<<<<< HEAD
   const [originalList] = useState([
     {
       id: 1,
@@ -353,13 +353,6 @@ export default function PatientListPage({ navigation }) {
   const [list,setList] = useState(originalList);
 
   // TODO: Fetch Patients
-=======
-  const [patients, setPatients] = useState([]);
-  const [originalList, setOriginalList] = useState([]);
-  
-  // Load data from database
-  // If it shows Error fetching patients: [TypeError: Network request failed], try changing localhost to IP
->>>>>>> 7cd99b3e71034075e7b84e8f5236a17a338a3d0f
   useEffect(() => {
     // Show the sorted patient list when load this page
     setList(sortPatientsByCondition([...originalList])); 
@@ -406,34 +399,31 @@ export default function PatientListPage({ navigation }) {
     <View style={[styles.item, 
       item.condition === 'Critical' ? styles.criticalRow : styles.stableRow]}>
       <View style={styles.row}>
-        <Text style={styles.id}>{item.patientId}</Text>
+      <Text style={styles.id}>ID: {item.id}</Text>
         <Text style={styles.name}>{item.name}</Text>
 
-        {/* Detail Icon */}
+        {/* Edit Icon */}
         <TouchableOpacity
           onPress={() => navigation.navigate('Patient Detail', { patient: item })}
         >
-          <MaterialCommunityIcons name="account-details" size={20} color="#007BFF" />
+          <Icon name="edit" size={20} color="#007BFF" />
         </TouchableOpacity>
       </View>
     </View>
   );
-<<<<<<< HEAD
 
   // Adding new patient to the list 
   const addPatient = (newPatient) => {
     setList((prevList) => sortPatientsByCondition([...prevList, newPatient]));
   };
-=======
-  
->>>>>>> 7cd99b3e71034075e7b84e8f5236a17a338a3d0f
   return (
     <>
       <View style={styles.container}>
         {/* Add Patient Icon */}
         <View style={styles.addPatientContainer}>
           <TouchableOpacity 
-          onPress={() => navigation.navigate('Add Patient')}>
+          onPress={() => navigation.navigate('Add Patient', {lastPatientId: list.length > 0 ? list[list.length - 1].id : 0,  // lastPatientId will be 0 if list is empty
+            addPatient: addPatient})}>
             <Ionicons name="person-add" size={30} color="#007BFF" /> 
           </TouchableOpacity>
         </View>

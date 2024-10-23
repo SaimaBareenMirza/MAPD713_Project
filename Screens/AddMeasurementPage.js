@@ -134,6 +134,7 @@ export default function AddMeasurementPage({ route, navigation }) {
         }
         
             </View>
+            {/* showing the current date and time*/} 
             <Text style={style.dateTimeText}>{date.toLocaleString()}</Text>
 
             <Button title="Submit Measurement" onPress={handleSubmit} />

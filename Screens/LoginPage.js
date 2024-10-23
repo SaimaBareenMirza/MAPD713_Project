@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
 import { CheckBox } from 'react-native-elements';
@@ -5,39 +6,6 @@ import { CheckBox } from 'react-native-elements';
 export default function LoginPage({ navigation }) {
   // Set remember me as false
   const [rememberMe, setRememberMe] = React.useState(false);
-<<<<<<< HEAD
-=======
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
-
-  const handleLogin = () => {
-    if (email === '' || password === '') {
-      Alert.alert("Error", "Please enter both email and password");
-      return;
-    }
-
-    // Authentication
-    fetch('http://10.0.0.60:3000/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ email: email, password })
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.message === "Login successful") {
-        navigation.navigate('Patient List');
-      } else {
-        Alert.alert("Error", data.message);
-      }
-    })
-    .catch(error => {
-      console.error('Error during login:', error);
-      Alert.alert("Error", "An error occurred during login");
-    });
-  };
->>>>>>> 7cd99b3e71034075e7b84e8f5236a17a338a3d0f
 
   return (
     <View style={styles.container}>
@@ -59,7 +27,7 @@ export default function LoginPage({ navigation }) {
             onPress={() => setRememberMe(!rememberMe)}
             containerStyle={styles.checkboxContainer}
           />
-          <TouchableOpacity onPress={() => navigation.navigate('Forgot Password')}>
+          <TouchableOpacity onPress={() => alert('Forgot Password Pressed')}>
             <Text style={styles.forgotPasswordText}>Forgot password?</Text>
           </TouchableOpacity>
         </View>

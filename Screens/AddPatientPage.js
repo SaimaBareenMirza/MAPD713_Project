@@ -7,6 +7,7 @@ export default function AddPatientPage({ navigation }) {
     const [name, setName] = useState("");
     const [age, setAge] = useState("");
     const [gender, setGender] = useState("");
+    const [condition, setCondition] = useState("");
     const [phone, setPhone] = useState("");
     const [email, setEmail] = useState("");
     const [address, setAddress] = useState("");
@@ -57,6 +58,25 @@ export default function AddPatientPage({ navigation }) {
                         title="Other"
                         checked={gender === "other"}
                         onPress={() => setGender("other")}
+                        containerStyle={styles.checkbox}
+                    />
+                </View>
+            </View>
+
+            {/* Condition */}
+            <View style={styles.View}>
+                <Text style={styles.label}>Condition:</Text>
+                <View style={styles.radioContainer}>
+                    <CheckBox
+                        title="Critical"
+                        checked={condition === "Critical"}
+                        onPress={() => setCondition("Critical")}
+                        containerStyle={styles.checkbox}
+                    />
+                    <CheckBox
+                        title="Stable"
+                        checked={condition === "Stable"}
+                        onPress={() => setCondition("Stable")}
                         containerStyle={styles.checkbox}
                     />
                 </View>

@@ -73,13 +73,13 @@ export default function PatientEditPage({ route, navigation }) {
                     <CheckBox
                         title="Critical"
                         checked={condition === "Critical"}
-                        onPress={() => setCondition("critical")}
+                        onPress={() => setCondition("Critical")}
                         containerStyle={styles.checkbox}
                     />
                     <CheckBox
                         title="Stable"
                         checked={condition === "Stable"}
-                        onPress={() => setCondition("stable")}
+                        onPress={() => setCondition("Stable")}
                         containerStyle={styles.checkbox}
                     />
                 </View>

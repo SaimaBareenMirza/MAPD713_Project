@@ -18,9 +18,43 @@ export default function AddPatientPage({ navigation }) {
 
     const bloodTypes = ["O+", "O-", "A+", "A-", "B+", "B-", "AB+", "AB-"];
 
-    const createNewPatient = () => {
-        // TODO: POST request
-        navigation.goBack();
+    const createNewPatient = async() => {
+        try {
+            const response = await fetch("http://localhost:3000/patients", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    name,
+                    age: parseInt(age),
+                    gender,
+                    admissionDate: new Date().toISOString(), // Assume that the admission date is the date created for the patient
+                    condition,
+                    phone,
+                    email,
+                    address,
+                    emergencyContactPhone: emergencyContact,
+                    medicalHistory: medical,
+                    allergies: allergy,
+                    bloodType
+                })
+            });
+    
+            const result = await response.json();
+            
+            if (response.ok) {
+                alert(result.message);
+                navigation.navigate('Patient List', { newPatient: result.patient });
+            } else {
+                alert(`Error: ${result.message}`);
+            }
+        } catch (error) {
+            console.error("Error creating patient:", error);
+            alert("Failed to create patient. Please try again.");
+        }
+
+        navigation.navigate('Patient List');
         return;
     };
 

@@ -3,11 +3,13 @@ import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SearchBar from "../Components/SearchBar";
+import { useRoute } from '@react-navigation/native';
 
 export default function PatientListPage({ navigation }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [patients, setPatients] = useState([]);
   const [originalList, setOriginalList] = useState([]);
+  const route = useRoute();
   
   // Load data from database
   // If it shows Error fetching patients: [TypeError: Network request failed], try changing localhost to IP
@@ -20,6 +22,13 @@ export default function PatientListPage({ navigation }) {
       })
       .catch((error) => console.error('Error fetching patients:', error));
   }, []);
+
+  // Show the existing patient list and the new patient
+  useEffect(() => {
+    if (route.params?.newPatient) {
+        setPatients(prevPatients => [route.params.newPatient, ...prevPatients]);
+    }
+}, [route.params?.newPatient]);
 
   const filterPatients = (nameToSearch) => {
     if (nameToSearch == '') {

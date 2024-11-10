@@ -63,16 +63,23 @@ app.post('/patients', async (req, res) => {
   } = req.body;
 
   try {
-    // Check if there is a duplicate patientId
-    const existingPatient = await PatientModel.findOne({ patientId });
+    // Check the latest patientId in db
+    const lastPatient = await PatientModel.findOne().sort({ patientId: -1 });
 
-    if (existingPatient) {
-      return res.status(400).json({ message: 'Patient ID already exists' });
+    // Default patientId is PA001
+    let newPatientId = "PA001";
+    
+    // The new patientID should be the latest patientId+1
+    if (lastPatient) {
+      const lastIdNumber = parseInt(lastPatient.patientId.slice(2), 10);
+      const nextIdNumber = lastIdNumber + 1;
+
+      newPatientId = `PA${String(nextIdNumber).padStart(3, '0')}`;
     }
 
     // Create a Patient object
     const newPatient = new PatientModel({
-      patientId,
+      patientId: newPatientId,
       name,
       age,
       gender,

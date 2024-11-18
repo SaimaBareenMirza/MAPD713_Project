@@ -108,7 +108,7 @@ export default function PatientDetailPage({ route, navigation }) {
           <Text style={styles.measurementTitle}>Recent Measurements</Text>
           {/* Add icon button */}
           <TouchableOpacity 
-          onPress={() => navigation.navigate('Add Measurement')}>
+          onPress={() => navigation.navigate('Add Measurement', { patientId: patient._id })}>
               <Icon name="add-circle-outline" size={30} color="#007BFF" />
           </TouchableOpacity>
         </View>

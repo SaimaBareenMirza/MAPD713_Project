@@ -3,12 +3,13 @@ import { Text, TextInput, StyleSheet, View, Button, TouchableOpacity } from "rea
 import DateTimePicker from "@react-native-community/datetimepicker"; 
 import { Picker } from '@react-native-picker/picker';
 
-export default function AddMeasurementPage({ navigation }) {
+export default function AddMeasurementPage({ route, navigation }) {
     const [ test, setTest ] = useState("");
     const [ value1, setValue1 ] = useState(""); 
     const [ value2, setValue2 ] = useState(""); 
     const [ date, setDate ] = useState(new Date());
-
+    const { patientId } = route.params;
+    
     const renderInputFields = () => {
         switch (test) {
             case "Blood Pressure":
@@ -55,21 +56,52 @@ export default function AddMeasurementPage({ navigation }) {
         }
     };
 
-    const handleSubmit = () => {
-        // TODO: Implement a POST request to submit measurement data
-        /*
-        const unit = test === "Blood Pressure" ? "mmHg" : 
-                     test === "Respiratory Rate" ? "breaths/min" : 
-                     test === "HeartBeat Rate" ? "bpm" : 
-                     test === "Blood Oxygen Level" ? "%" : "";
+    const handleSubmit = async () => {
+        // Check all fields are filled in
+        if (!test || !value1 || (test === "Blood Pressure" && !value2)) {
+            alert("Please fill in all required fields.");
+            return;
+        }
 
-        
+        let formattedValue = value1;
+            
+        if (test === "Blood Pressure") {
+            formattedValue = `${value1}/${value2} mmHg`;
+        } else if (test === "Respiratory Rate") {
+            formattedValue = `${value1} breaths/min`
+        } else if (test === "HeartBeat Rate") {
+            formattedValue = `${value1} bpm`
+        } else if (test === "Blood Oxygen Level") {
+            formattedValue = `${value1} %`
+        }
+
         const newMeasurement = {
+            patient_id: patientId,
             type: test,
-            value: test === "Blood Pressure" ? `${value1}/${value2}` : value1,
-            unit: unit,
-            dateTime: date.toLocaleString(),
-        }; */
+            value: formattedValue,
+            dateTime: date.toISOString(),
+        };
+    
+        try {
+            const response = await fetch("http://localhost:3000/clinical", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(newMeasurement),
+            });
+    
+            if (response.ok) {
+                alert("Measurement added successfully.");
+                navigation.goBack();
+            } else {
+                const errorData = await response.json();
+                alert(`Error: ${errorData.message}`);
+            }
+        } catch (error) {
+            console.error("Error adding measurement:", error);
+            alert("Failed to add measurement. Please try again.");
+        }
         
         navigation.goBack(); 
     };

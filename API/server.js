@@ -6,6 +6,7 @@ const cors = require('cors');
 const Patient = require('./models/Patient');
 const User = require('./models/user');
 const bcrypt = require('bcrypt');
+const Clinical = require('./models/Clinical');
 
 const app = express();
 const PORT = 3000;
@@ -126,6 +127,44 @@ app.post('/login', async (req, res) => {
     return res.json({ message: "Login successful", user: { email: user.email, role: user.role } });
   } catch (err) {
     return res.status(500).json({ message: "Server error" });
+  }
+});
+
+// Connect to user_db
+const clinicalDB = mongoose.createConnection('mongodb://localhost:27017/clinical_db');
+const ClinicalModel = clinicalDB.model('Clinical', Clinical.schema);
+
+// Add a new clinical measurement
+app.post('/clinical', async (req, res) => {
+  const newClinical = new ClinicalModel({
+    ...req.body,
+    dateTime: new Date()  // Use the current date and time
+  });
+
+  try {
+    await newClinical.save();
+    res.status(201).json(newClinical);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
+// Get clinical measurements for a specific patient
+app.get('/clinical/:patientId', async (req, res) => {
+  const { patientId } = req.params;
+
+  try {
+    // Search the specific patient's measurement data
+    const clinicalData = await ClinicalModel.find({ patient_id: new mongoose.Types.ObjectId(patientId) });
+
+    // Check if data exists
+    if (clinicalData.length === 0) {
+      return res.status(404).json({ message: "No clinical measurement found." });
+    }
+
+    res.status(200).json(clinicalData);
+  } catch(error) {
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 });
 

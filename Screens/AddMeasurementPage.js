@@ -103,7 +103,7 @@ export default function AddMeasurementPage({ route, navigation }) {
             alert("Failed to add measurement. Please try again.");
         }
         
-        navigation.goBack(); 
+        navigation.navigate('Patient Detail', { patientId: patientId })
     };
     
 

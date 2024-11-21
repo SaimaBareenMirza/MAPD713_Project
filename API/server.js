@@ -157,11 +157,6 @@ app.get('/clinical/:patientId', async (req, res) => {
     // Search the specific patient's measurement data
     const clinicalData = await ClinicalModel.find({ patient_id: new mongoose.Types.ObjectId(patientId) });
 
-    // Check if data exists
-    if (clinicalData.length === 0) {
-      return res.status(404).json({ message: "No clinical measurement found." });
-    }
-
     res.status(200).json(clinicalData);
   } catch(error) {
     res.status(500).json({ message: "Server error", error: error.message });

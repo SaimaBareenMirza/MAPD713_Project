@@ -1,14 +1,48 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
 export default function PatientDetailPage({ route, navigation }) {
   // Get the patient data passed from the patient list page
-  const { patient } = route.params;
+  const { patientId } = route.params;
+  const [clinicalData, setClinicalData] = useState([]);
+  const [patient, setPatient] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // TODO: Fetch clinical data from DB
-  const [clinicalData, setClinicalData] = useState("");
+  useEffect(() => {
+    const fetchPatientData = async () => {
+      try {
+          const response = await fetch(`http://10.0.0.60:3000/patients/${patientId}`);
+          if (response.ok) {
+              const data = await response.json();
+              setPatient(data.patient);
+          }
+      } catch (error) {
+          console.error("Error fetching patient data:", error);
+      }
+    };
+
+    const fetchClinicalData = async () => {
+      try {
+        const response = await fetch(`http://10.0.0.60:3000/clinical/${patientId}`);
+
+        if (response.ok) {
+          const data = await response.json();
+          setClinicalData(data);
+        } else {
+          console.error('Error fetching clinical data:', response.status);
+        }
+      } catch (error) {
+        console.error('Error fetching clinical data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPatientData();
+    fetchClinicalData();
+  }, [patientId]);
 
   const renderMeasurementItem = ({ item }) => (
     <View style={styles.measurementRow}>
@@ -33,74 +67,79 @@ export default function PatientDetailPage({ route, navigation }) {
   return (
     <View style={styles.container}>
       {/* Top: Patient Profile */}
-      <View style={styles.profileContainer}>
-        {/* Use the temporary patient photo here, the image url will be stored in the DB */}
-        <Image 
-          source={require('../assets/patient-photo.jpg')}
-          style={styles.photo}
-        />
+      {patient ? (
+        <>
+          <View style={styles.profileContainer}>
+            {/* Use the temporary patient photo here, the image url will be stored in the DB */}
+            <Image 
+              source={require('../assets/patient-photo.jpg')}
+              style={styles.photo}
+            />
 
-        {/* Display profile details */}
-        <View style={styles.profileDetails}>
-          <View style={styles.nameRow}>
-            <Text style={styles.nameText}>{patient.name}</Text>
-            
-            {/* Edit icon */}
-            <TouchableOpacity 
-              onPress={() => navigation.navigate('Patient Edit', { patient })}
-              style={styles.editIconContainer}
-            >
-              <FontAwesomeIcon name="edit" size={24} color="#007BFF" />
-            </TouchableOpacity>
+            {/* Display profile details */}
+            <View style={styles.profileDetails}>
+              <View style={styles.nameRow}>
+                <Text style={styles.nameText}>{patient.name}</Text>
+                
+                {/* Edit icon */}
+                <TouchableOpacity 
+                  onPress={() => navigation.navigate('Patient Edit', { patient })}
+                  style={styles.editIconContainer}
+                >
+                  <FontAwesomeIcon name="edit" size={24} color="#007BFF" />
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.row}>
+                <View style={styles.item}>
+                  <Text style={styles.label}>ID:</Text>
+                  <Text style={styles.value}>{patient.patientId}</Text>
+                </View>
+                <View style={styles.item}>
+                  <Text style={styles.label}>Age:</Text>
+                  <Text style={styles.value}>{patient.age}</Text>
+                </View>
+              </View>
+              <View style={styles.row}>
+                <View style={styles.item}>
+                  <Text style={styles.label}>Gender:</Text>
+                  <Text style={styles.value}>{patient.gender}</Text>
+                </View>
+                <View style={styles.item}>
+                  <Text style={styles.label}>Admission Date:</Text>
+                  <Text style={styles.value}>{formatDate(patient.admissionDate)}</Text>
+                </View>
+              </View>
+              <View style={styles.singleRow}>
+                <Text style={styles.label}>Condition:</Text>
+                <Text style={styles.value}>{patient.condition}</Text>
+              </View>
+            </View>
           </View>
 
-          <View style={styles.row}>
-            <View style={styles.item}>
-              <Text style={styles.label}>ID:</Text>
-              <Text style={styles.value}>{patient.patientId}</Text>
+          <View style={styles.contactContainer}>
+            <Text style={styles.contactTitle}>Contact Details:</Text>
+            <View style={styles.row}>
+              <Text style={styles.label}>Phone:</Text>
+              <Text style={styles.value}>{patient.phone}</Text>
             </View>
-            <View style={styles.item}>
-              <Text style={styles.label}>Age:</Text>
-              <Text style={styles.value}>{patient.age}</Text>
+            <View style={styles.row}>
+              <Text style={styles.label}>Email:</Text>
+              <Text style={styles.value}>{patient.email}</Text>
+            </View>
+            <View style={styles.row}>
+              <Text style={styles.label}>Address:</Text>
+              <Text style={styles.value}>{patient.address}</Text>
+            </View>
+            <View style={styles.row}>
+              <Text style={styles.label}>Emergency Contact:</Text>
+              <Text style={styles.value}>{patient.emergencyContactPhone}</Text>
             </View>
           </View>
-          <View style={styles.row}>
-            <View style={styles.item}>
-              <Text style={styles.label}>Gender:</Text>
-              <Text style={styles.value}>{patient.gender}</Text>
-            </View>
-            <View style={styles.item}>
-              <Text style={styles.label}>Admission Date:</Text>
-              <Text style={styles.value}>{formatDate(patient.admissionDate)}</Text>
-            </View>
-          </View>
-          <View style={styles.singleRow}>
-            <Text style={styles.label}>Condition:</Text>
-            <Text style={styles.value}>{patient.condition}</Text>
-          </View>
-        </View>
-      </View>
-
-      {/* Display contact details */}
-      <View style={styles.contactContainer}>
-        <Text style={styles.contactTitle}>Contact Details:</Text>
-        <View style={styles.row}>
-          <Text style={styles.label}>Phone:</Text>
-          <Text style={styles.value}>{patient.phone}</Text>
-        </View>
-        <View style={styles.row}>
-          <Text style={styles.label}>Email:</Text>
-          <Text style={styles.value}>{patient.email}</Text>
-        </View>
-        <View style={styles.row}>
-          <Text style={styles.label}>Address:</Text>
-          <Text style={styles.value}>{patient.address}</Text>
-        </View>
-        <View style={styles.row}>
-          <Text style={styles.label}>Emergency Contact:</Text>
-          <Text style={styles.value}>{patient.emergencyContactPhone}</Text>
-        </View>
-      </View>
+        </>
+      ) : (
+        <Text>Loading patient data...</Text>
+      )}
 
       {/* Display History Measurement */}
       <View style={styles.measurementContainer}>

@@ -3,13 +3,34 @@ import { Text, TextInput, StyleSheet, View, TouchableOpacity, Alert } from 'reac
 
 export default function ForgotPasswordPage({ navigation }) {
   const [email, setEmail] = useState('');
+  const [password, setPassword] = React.useState('');
 
-  const handleResetPassword = () => {
-    // TODO: Implement a POST request to update the password 
-    if (!email) {
-      Alert.alert('Error', 'Please enter your email address.');
-    } else {
-      Alert.alert('Success', 'A password reset link has been sent to your email.');
+  const handleResetPassword = async () => {
+    if (!email || !password) {
+      Alert.alert('Error', 'Please enter both email and new password.');
+      return;
+    }
+  
+    try {
+      const response = await fetch('http://localhost:3000/reset-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, newPassword: password }),
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        Alert.alert('Success', data.message);
+
+        // If reset the password successfully, navigate back to login page
+        navigation.navigate('Login');
+      } else {
+        Alert.alert('Error', data.message);
+      }
+    } catch (error) {
+      console.error("Error resetting password:", error);
+      Alert.alert('Error', 'An error occurred. Please try again later.');
     }
   };
 
@@ -26,14 +47,16 @@ export default function ForgotPasswordPage({ navigation }) {
         keyboardType="email-address"
       />
 
+      <TextInput 
+        style={styles.input} 
+        placeholder="Password" 
+        secureTextEntry={true} 
+        onChangeText={setPassword} 
+      />
+
       {/* Reset Password Button */}
       <TouchableOpacity style={styles.button} onPress={handleResetPassword}>
         <Text style={styles.buttonText}>Reset Password</Text>
-      </TouchableOpacity>
-
-      {/* Back to Login Button */}
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-        <Text style={styles.backToLogin}>Back to Login</Text>
       </TouchableOpacity>
     </View>
   );

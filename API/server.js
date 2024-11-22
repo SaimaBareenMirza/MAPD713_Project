@@ -176,6 +176,31 @@ app.post('/login', async (req, res) => {
   }
 });
 
+app.post('/reset-password', async (req, res) => {
+  const { email, newPassword } = req.body;
+
+  try {
+    if (!email || !newPassword) {
+      return res.status(400).json({ message: "Email and new password are required." });
+    }
+
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "Email does not exist." });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    user.password = hashedPassword;
+    await user.save();
+
+    res.status(200).json({ message: "Password reset successfully." });
+  } catch (error) {
+    console.error("Error resetting password:", error);
+    res.status(500).json({ message: "Internal server error." });
+  }
+});
+
 // Connect to user_db
 const clinicalDB = mongoose.createConnection('mongodb://localhost:27017/clinical_db');
 const ClinicalModel = clinicalDB.model('Clinical', Clinical.schema);

@@ -103,6 +103,52 @@ app.post('/patients', async (req, res) => {
   }
 });
 
+app.put('/patients/:id', async (req, res) => {
+  const { id } = req.params;
+  const {
+    name,
+    age,
+    gender,
+    condition,
+    phone,
+    email,
+    address,
+    emergencyContactPhone,
+    medicalHistory,
+    allergies,
+    bloodType,
+  } = req.body;
+
+  try {
+    const updatedPatient = await PatientModel.findByIdAndUpdate(
+      id,
+      {
+        name,
+        age,
+        gender,
+        condition,
+        phone,
+        email,
+        address,
+        emergencyContactPhone,
+        medicalHistory,
+        allergies,
+        bloodType,
+      },
+      { new: true }
+    );
+
+    if (!updatedPatient) {
+      return res.status(404).json({ message: "Patient not found." });
+    }
+
+    res.status(200).json({ message: "Patient updated successfully.", patient: updatedPatient });
+  } catch (error) {
+    console.error("Error updating patient:", error);
+    res.status(500).json({ message: "Internal server error." });
+  }
+});
+
 // Connect to user_db
 const userDB = mongoose.createConnection('mongodb://localhost:27017/user_db');
 const UserModel = userDB.model('User', User.schema);

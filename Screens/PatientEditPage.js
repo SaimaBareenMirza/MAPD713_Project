@@ -20,10 +20,42 @@ export default function PatientEditPage({ route, navigation }) {
 
     const bloodTypes = ["O+", "O-", "A+", "A-", "B+", "B-", "AB+", "AB-"];
 
-    const createNewPatient = () => {
-        // TODO: POST request
-        console.log("Saving updated patient data...");
-        navigation.goBack();
+    const editPatient = async () => {
+        const updatedPatient = {
+            name,
+            age: parseInt(age, 10),
+            gender,
+            condition,
+            phone,
+            email,
+            address,
+            emergencyContactPhone: emergencyContact,
+            medical,
+            allergy,
+            bloodType,
+        };
+
+        try {
+            const response = await fetch(`http://localhost:3000/patients/${patient._id}`, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(updatedPatient),
+            });
+        
+            if (response.ok) {
+              alert("Patient updated successfully.");
+              navigation.navigate('Patient Detail', { patientId: patient._id, refresh: true });
+            } else {
+              const errorData = await response.json();
+              alert(`Failed to update patient: ${errorData.message}`);
+            }
+        } catch (error) {
+            console.error("Error updating patient:", error);
+            alert("An error occurred while updating the patient.");
+        }
+
         return;
     };
 
@@ -47,19 +79,19 @@ export default function PatientEditPage({ route, navigation }) {
                 <View style={styles.radioContainer}>
                     <CheckBox
                         title="Male"
-                        checked={gender === "Male"}
+                        checked={gender === "male"}
                         onPress={() => setGender("male")}
                         containerStyle={styles.checkbox}
                     />
                     <CheckBox
                         title="Female"
-                        checked={gender === "Female"}
+                        checked={gender === "female"}
                         onPress={() => setGender("female")}
                         containerStyle={styles.checkbox}
                     />
                     <CheckBox
                         title="Other"
-                        checked={gender === "Other"}
+                        checked={gender === "other"}
                         onPress={() => setGender("other")}
                         containerStyle={styles.checkbox}
                     />
@@ -126,7 +158,7 @@ export default function PatientEditPage({ route, navigation }) {
             </Picker>
 
             {/* Create Button */}
-            <TouchableOpacity style={styles.createButton} onPress={createNewPatient} >
+            <TouchableOpacity style={styles.createButton} onPress={editPatient} >
                 <Text style={styles.buttonText}>Submit</Text>
             </TouchableOpacity>
         </ScrollView>

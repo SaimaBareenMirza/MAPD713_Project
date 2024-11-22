@@ -8,6 +8,9 @@ import AddPatientPage from './Screens/AddPatientPage';
 import AddMeasurementPage from './Screens/AddMeasurementPage';
 import PatientEditPage from './Screens/PatientEditPage';
 import ForgotPasswordPage from './Screens/ForgotPasswordPage';
+import { LogBox } from 'react-native';
+
+LogBox.ignoreLogs(['Support for defaultProps will be removed']);
 
 const Stack = createStackNavigator();
 

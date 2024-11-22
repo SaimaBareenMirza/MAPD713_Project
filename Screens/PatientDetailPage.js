@@ -5,7 +5,7 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
 export default function PatientDetailPage({ route, navigation }) {
   // Get the patient data passed from the patient list page
-  const { patientId } = route.params;
+  const { patientId, refresh } = route.params;
   const [clinicalData, setClinicalData] = useState([]);
   const [patient, setPatient] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -13,7 +13,7 @@ export default function PatientDetailPage({ route, navigation }) {
   useEffect(() => {
     const fetchPatientData = async () => {
       try {
-          const response = await fetch(`http://10.0.0.60:3000/patients/${patientId}`);
+          const response = await fetch(`http://localhost:3000/patients/${patientId}`);
           if (response.ok) {
               const data = await response.json();
               setPatient(data.patient);
@@ -25,7 +25,7 @@ export default function PatientDetailPage({ route, navigation }) {
 
     const fetchClinicalData = async () => {
       try {
-        const response = await fetch(`http://10.0.0.60:3000/clinical/${patientId}`);
+        const response = await fetch(`http://localhost:3000/clinical/${patientId}`);
 
         if (response.ok) {
           const data = await response.json();
@@ -42,7 +42,7 @@ export default function PatientDetailPage({ route, navigation }) {
 
     fetchPatientData();
     fetchClinicalData();
-  }, [patientId]);
+  }, [patientId, refresh]);
 
   const renderMeasurementItem = ({ item }) => (
     <View style={styles.measurementRow}>

@@ -93,7 +93,7 @@ export default function AddMeasurementPage({ route, navigation }) {
     
             if (response.ok) {
                 alert("Measurement added successfully.");
-                navigation.goBack();
+                navigation.navigate('Patient Detail', { patientId: patientId, refresh: true })
             } else {
                 const errorData = await response.json();
                 alert(`Error: ${errorData.message}`);

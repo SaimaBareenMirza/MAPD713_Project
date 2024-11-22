@@ -76,7 +76,7 @@ export default function PatientListPage({ navigation }) {
 
         {/* Detail Icon */}
         <TouchableOpacity
-          onPress={() => navigation.navigate('Patient Detail', { patient: item })}
+          onPress={() => navigation.navigate('Patient Detail', { patientId: item._id })}
         >
           <MaterialCommunityIcons name="account-details" size={20} color="#007BFF" />
         </TouchableOpacity>

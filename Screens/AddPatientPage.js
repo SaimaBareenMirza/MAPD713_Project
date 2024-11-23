@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, TextInput, StyleSheet, View, TouchableOpacity, ScrollView } from "react-native";
+import { Text, TextInput, StyleSheet, View, TouchableOpacity, ScrollView, Alert } from "react-native";
 import { Picker } from '@react-native-picker/picker';
 import { CheckBox } from 'react-native-elements';
 
@@ -44,14 +44,14 @@ export default function AddPatientPage({ navigation }) {
             const result = await response.json();
             
             if (response.ok) {
-                alert(result.message);
+                Alert.alert(result.message);
                 navigation.navigate('Patient List', { newPatient: result.patient });
             } else {
-                alert(`Error: ${result.message}`);
+                Alert.alert(`Error: ${result.message}`);
             }
         } catch (error) {
             console.error("Error creating patient:", error);
-            alert("Failed to create patient. Please try again.");
+            Alert.alert("Failed to create patient. Please try again.");
         }
 
         navigation.navigate('Patient List');
@@ -125,7 +125,7 @@ export default function AddPatientPage({ navigation }) {
             {/* Emergency Contact */}
             <View style={styles.View}>
                 <Text style={styles.label}>Emergency Contact:</Text>
-                <TextInput placeholder="Enter" style={styles.value} value={emergencyContact} onChangeText={setEmergencyContact} keyboardType="phone-pad" />
+                <TextInput placeholder="Enter Emergency Contact" style={styles.value} value={emergencyContact} onChangeText={setEmergencyContact} keyboardType="phone-pad" />
             </View>
 
             {/* Email */}
@@ -142,11 +142,11 @@ export default function AddPatientPage({ navigation }) {
 
             {/* Medical History */}
             <Text style={styles.label}>Medical History:</Text>
-            <TextInput value={medical} onChangeText={setMedical} style={styles.medical} multiline numberOfLines={5} />
+            <TextInput placeholder="Enter Medical History" value={medical} onChangeText={setMedical} style={styles.medical} multiline numberOfLines={5} />
 
             {/* Allergies */}
             <Text style={styles.label}>Allergies (if Any):</Text>
-            <TextInput value={allergy} onChangeText={setAllergy} style={styles.medical} multiline numberOfLines={3} />
+            <TextInput placeholder="Enter Allergies" value={allergy} onChangeText={setAllergy} style={styles.medical} multiline numberOfLines={3} />
 
             {/* Blood Type Dropdown */}
             <Text style={styles.label}>Blood Type:</Text>

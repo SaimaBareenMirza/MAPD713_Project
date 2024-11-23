@@ -85,6 +85,7 @@ export default function PatientDetailPage({ route, navigation }) {
                 <TouchableOpacity 
                   onPress={() => navigation.navigate('Patient Edit', { patient })}
                   style={styles.editIconContainer}
+                  testID="edit-patient"
                 >
                   <FontAwesomeIcon name="edit" size={24} color="#007BFF" />
                 </TouchableOpacity>
@@ -147,8 +148,10 @@ export default function PatientDetailPage({ route, navigation }) {
           <Text style={styles.measurementTitle}>Recent Measurements</Text>
           {/* Add icon button */}
           <TouchableOpacity 
-          onPress={() => navigation.navigate('Add Measurement', { patientId: patient._id })}>
-              <Icon name="add-circle-outline" size={30} color="#007BFF" />
+            testID="add-measurement"
+            onPress={() => navigation.navigate('Add Measurement', { patientId: patient._id })}
+          >
+            <Icon name="add-circle-outline" size={30} color="#007BFF" />
           </TouchableOpacity>
         </View>
         <View style={styles.measurementHeader}>

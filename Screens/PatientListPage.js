@@ -32,8 +32,6 @@ export default function PatientListPage({ navigation }) {
 
   const filterPatients = (nameToSearch) => {
     if (nameToSearch == '') {
-      // TODO: Fetch Patients
-
       // If the search term is empty, reset it as the initial patient list and sort it
       setPatients(sortPatientsByCondition([...originalList]));
     } else {
@@ -77,8 +75,10 @@ export default function PatientListPage({ navigation }) {
         {/* Detail Icon */}
         <TouchableOpacity
           onPress={() => navigation.navigate('Patient Detail', { patientId: item._id })}
+          accessibilityRole="button"
+          accessibilityLabel="account-details"
         >
-          <MaterialCommunityIcons name="account-details" size={20} color="#007BFF" />
+          <MaterialCommunityIcons name="account-details" size={20} color="#007BFF" testID="account-details" />
         </TouchableOpacity>
       </View>
     </View>
@@ -90,8 +90,12 @@ export default function PatientListPage({ navigation }) {
         {/* Add Patient Icon */}
         <View style={styles.addPatientContainer}>
           <TouchableOpacity 
-          onPress={() => navigation.navigate('Add Patient')}>
-            <Ionicons name="person-add" size={30} color="#007BFF" /> 
+            onPress={() => navigation.navigate('Add Patient')}
+            accessibilityRole="button"
+            accessibilityLabel="person-add"
+            testID="person-add"
+          >
+            <Ionicons name="person-add" size={30} color="#007BFF"/> 
           </TouchableOpacity>
         </View>
         

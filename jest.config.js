@@ -5,7 +5,7 @@ module.exports = {
         "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
     },
     transformIgnorePatterns: [
-        "node_modules/(?!(react-native|@react-native|react-native-vector-icons|@react-native-vector-icons|@react-native-elements|@react-native-elements/themed)/)",
+        "node_modules/(?!(react-native|@react-native|react-native-elements|react-native-vector-icons|@react-native-vector-icons|@react-native-elements|@react-native-elements/themed)/)",
     ],
 };
   

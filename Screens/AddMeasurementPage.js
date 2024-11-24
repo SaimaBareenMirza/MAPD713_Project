@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, TextInput, StyleSheet, View, Button, TouchableOpacity } from "react-native";
+import { Text, TextInput, StyleSheet, View, Button, TouchableOpacity, Alert } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker"; 
 import { Picker } from '@react-native-picker/picker';
 
@@ -59,7 +59,7 @@ export default function AddMeasurementPage({ route, navigation }) {
     const handleSubmit = async () => {
         // Check all fields are filled in
         if (!test || !value1 || (test === "Blood Pressure" && !value2)) {
-            alert("Please fill in all required fields.");
+            Alert.alert("Please fill in all required fields.");
             return;
         }
 
@@ -92,15 +92,15 @@ export default function AddMeasurementPage({ route, navigation }) {
             });
     
             if (response.ok) {
-                alert("Measurement added successfully.");
+                Alert.alert("Measurement added successfully.");
                 navigation.navigate('Patient Detail', { patientId: patientId, refresh: true })
             } else {
                 const errorData = await response.json();
-                alert(`Error: ${errorData.message}`);
+                Alert.alert(`Error: ${errorData.message}`);
             }
         } catch (error) {
             console.error("Error adding measurement:", error);
-            alert("Failed to add measurement. Please try again.");
+            Alert.alert("Failed to add measurement. Please try again.");
         }
         
         navigation.navigate('Patient Detail', { patientId: patientId })

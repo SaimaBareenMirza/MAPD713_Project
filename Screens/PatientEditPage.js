@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, TextInput, StyleSheet, View, TouchableOpacity, ScrollView } from "react-native";
+import { Text, TextInput, StyleSheet, View, TouchableOpacity, ScrollView, Alert } from "react-native";
 import { Picker } from '@react-native-picker/picker';
 import { CheckBox } from 'react-native-elements';
 
@@ -22,6 +22,7 @@ export default function PatientEditPage({ route, navigation }) {
 
     const editPatient = async () => {
         const updatedPatient = {
+            _id: patient._id,
             name,
             age: parseInt(age, 10),
             gender,
@@ -45,15 +46,15 @@ export default function PatientEditPage({ route, navigation }) {
             });
         
             if (response.ok) {
-              alert("Patient updated successfully.");
+              Alert.alert("Patient updated successfully.");
               navigation.navigate('Patient Detail', { patientId: patient._id, refresh: true });
             } else {
               const errorData = await response.json();
-              alert(`Failed to update patient: ${errorData.message}`);
+              Alert.alert(`Failed to update patient: ${errorData.message}`);
             }
         } catch (error) {
             console.error("Error updating patient:", error);
-            alert("An error occurred while updating the patient.");
+            Alert.alert("An error occurred while updating the patient.");
         }
 
         return;
@@ -126,7 +127,7 @@ export default function PatientEditPage({ route, navigation }) {
             {/* Emergency Contact */}
             <View style={styles.View}>
                 <Text style={styles.label}>Emergency Contact:</Text>
-                <TextInput placeholder="Enter" style={styles.value} value={emergencyContact} onChangeText={setEmergencyContact} keyboardType="phone-pad" />
+                <TextInput placeholder="Enter Emergency Contact" style={styles.value} value={emergencyContact} onChangeText={setEmergencyContact} keyboardType="phone-pad" />
             </View>
 
             {/* Email */}

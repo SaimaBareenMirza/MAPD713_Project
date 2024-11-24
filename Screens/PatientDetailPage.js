@@ -13,7 +13,7 @@ export default function PatientDetailPage({ route, navigation }) {
   useEffect(() => {
     const fetchPatientData = async () => {
       try {
-          const response = await fetch(`http://localhost:3000/patients/${patientId}`);
+          const response = await fetch(`http://192.168.2.49:3000/patients/${patientId}`);
           if (response.ok) {
               const data = await response.json();
               setPatient(data.patient);

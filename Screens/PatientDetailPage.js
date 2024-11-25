@@ -25,7 +25,7 @@ export default function PatientDetailPage({ route, navigation }) {
 
     const fetchClinicalData = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/clinical/${patientId}`);
+        const response = await fetch(`http://192.168.2.49:3000/clinical/${patientId}`);
 
         if (response.ok) {
           const data = await response.json();
@@ -42,6 +42,13 @@ export default function PatientDetailPage({ route, navigation }) {
 
     fetchPatientData();
     fetchClinicalData();
+
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchPatientData();
+      fetchClinicalData();
+    });
+
+    return unsubscribe;
   }, [patientId, refresh]);
 
   const renderMeasurementItem = ({ item }) => (

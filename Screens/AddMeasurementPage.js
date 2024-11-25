@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, TextInput, StyleSheet, View, Button, TouchableOpacity, Alert } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker"; 
 import { Picker } from '@react-native-picker/picker';
@@ -8,6 +8,8 @@ export default function AddMeasurementPage({ route, navigation }) {
     const [ value1, setValue1 ] = useState(""); 
     const [ value2, setValue2 ] = useState(""); 
     const [ date, setDate ] = useState(new Date());
+    const [showPicker, setShowPicker] = useState(false);
+    const [pickerMode, setPickerMode] = useState("date");
     const { patientId } = route.params;
     
     const renderInputFields = () => {
@@ -59,7 +61,7 @@ export default function AddMeasurementPage({ route, navigation }) {
     const handleSubmit = async () => {
         // Check all fields are filled in
         if (!test || !value1 || (test === "Blood Pressure" && !value2)) {
-            Alert.alert("Please fill in all required fields.");
+            alert("Please fill in all required fields.");
             return;
         }
 
@@ -83,7 +85,7 @@ export default function AddMeasurementPage({ route, navigation }) {
         };
     
         try {
-            const response = await fetch("http://localhost:3000/clinical", {
+            const response = await fetch("http://192.168.2.49:3000/clinical", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -93,7 +95,7 @@ export default function AddMeasurementPage({ route, navigation }) {
     
             if (response.ok) {
                 Alert.alert("Measurement added successfully.");
-                navigation.navigate('Patient Detail', { patientId: patientId, refresh: true })
+                navigation.navigate('Patient Detail', { patientId: patientId, refresh: true });
             } else {
                 const errorData = await response.json();
                 Alert.alert(`Error: ${errorData.message}`);
@@ -103,13 +105,19 @@ export default function AddMeasurementPage({ route, navigation }) {
             Alert.alert("Failed to add measurement. Please try again.");
         }
         
-        navigation.navigate('Patient Detail', { patientId: patientId })
+        
     };
-    
+    const togglePicker = (mode) => {
+        setPickerMode(mode);
+        setShowPicker(true);
+    };
 
     // To set date and time
     const onChange = (e, selectedDate) => {
-        setDate(selectedDate);
+        setShowPicker(false);
+        if (selectedDate) {
+            setDate(selectedDate);
+        }
     };
 
     return (
@@ -129,21 +137,32 @@ export default function AddMeasurementPage({ route, navigation }) {
 
             {renderInputFields()}
             <View style={styles.DateTime}>
-                <Text style={styles.label}>Test Time:</Text>
-                <DateTimePicker 
-                    value={date}
-                    mode={"date"}
-                    is24Hour={true}
-                    onChange={onChange}
-                />
-                <DateTimePicker 
-                    value={date}
-                    mode={"time"}
-                    is24Hour={true}
-                    onChange={onChange}
-                />
+            <TouchableOpacity
+                    style={styles.dateTimeButton}
+                    onPress={() => togglePicker("date")}>
+                    <Text style={styles.label}>{`Date: ${date.toLocaleDateString()}`}</Text>
+                </TouchableOpacity>
+                {/* <Text style={styles.dateTimeText}>{date.toDateString()}</Text> */}
+                </View>
+
+                <View style={styles.DateTime}>
+                <TouchableOpacity
+                    onPress={() => togglePicker("time")}>
+                    <Text style={styles.label}>{`Time: ${date.toLocaleTimeString()}`}</Text>
+                </TouchableOpacity>
+                {/* <Text style={styles.dateTimeText}>
+                {`Time: ${date.toLocaleTimeString()}`} */}
+                {/* </Text> */}
         
             </View>
+
+                    { showPicker && (
+                     <DateTimePicker
+                    value={date}
+                    mode={pickerMode}
+                    is24Hour={true}
+                    onChange={onChange} />)}
+
 
             <TouchableOpacity 
                 onPress={handleSubmit}

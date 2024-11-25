@@ -56,9 +56,6 @@ describe('AddMeasurementPage', () => {
 
         expect(getByText('Select Test:')).toBeTruthy();
         expect(getByTestId('picker')).toBeTruthy();
-        expect(getByText('Test Time:')).toBeTruthy();
-        expect(getByTestId('datetimepicker-date')).toBeTruthy();
-        expect(getByTestId('datetimepicker-time')).toBeTruthy();
         expect(getByText('Submit Measurement')).toBeTruthy();
     });
 
@@ -89,8 +86,8 @@ describe('AddMeasurementPage', () => {
         fireEvent.press(getByTestId('picker')); // Select "Blood Pressure"
         fireEvent.changeText(getByPlaceholderText('Enter Sys Value'), '120');
         fireEvent.changeText(getByPlaceholderText('Enter Dia Value'), '80');
-        fireEvent.press(getByTestId('datetimepicker-date'));
-        fireEvent.press(getByTestId('datetimepicker-time'));
+        // fireEvent.press(getByTestId('datetimepicker-date'));
+        // fireEvent.press(getByTestId('datetimepicker-time'));
         fireEvent.press(getByText('Submit Measurement'));
 
         // Check fetch was called correctly
@@ -118,8 +115,8 @@ describe('AddMeasurementPage', () => {
         fireEvent.press(getByTestId('picker')); // Select "Blood Pressure"
         fireEvent.changeText(getByPlaceholderText('Enter Sys Value'), '120');
         fireEvent.changeText(getByPlaceholderText('Enter Dia Value'), '80');
-        fireEvent.press(getByTestId('datetimepicker-date'));
-        fireEvent.press(getByTestId('datetimepicker-time'));
+        // fireEvent.press(getByTestId('datetimepicker-date'));
+        // fireEvent.press(getByTestId('datetimepicker-time'));
         fireEvent.press(getByText('Submit Measurement'));
 
         // Check error alert

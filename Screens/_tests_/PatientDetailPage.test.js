@@ -1,9 +1,15 @@
 import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
 import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import PatientDetailPage from '../PatientDetailPage';
 
 // Mock navigation and route params
 const mockNavigate = jest.fn();
+const mockAddListener = jest.fn();
+const mockNavigation = {
+  navigate: mockNavigate,
+  addListener: mockAddListener,
+};
 const mockRoute = {
     params: {
         patientId: '123456',
@@ -21,8 +27,7 @@ describe('PatientDetailPage', () => {
         jest.restoreAllMocks();
     });
 
-    it('render patient data correctly', async () => {
-        // Mock patient data
+    it('renders patient data correctly', async () => {
         const mockPatient = {
             _id: '123456',
             patientId: 'PA001',
@@ -37,15 +42,12 @@ describe('PatientDetailPage', () => {
             emergencyContactPhone: '111-222-3333',
         };
 
-        // Mock clinical data
         const mockClinicalData = [
             { type: 'Blood Pressure', value: '120/80', dateTime: '2023-02-01T10:00:00Z' },
             { type: 'Heart Rate', value: '75 bpm', dateTime: '2023-02-02T12:00:00Z' },
         ];
 
-        // Mock fetch responses
-        fetch
-        .mockResolvedValueOnce({
+        fetch.mockResolvedValueOnce({
             ok: true,
             json: async () => ({ patient: mockPatient }),
         })
@@ -55,7 +57,9 @@ describe('PatientDetailPage', () => {
         });
 
         const { findByText, getByText } = render(
-            <PatientDetailPage route={mockRoute} navigation={{ navigate: mockNavigate }} />
+            <NavigationContainer>
+                <PatientDetailPage route={mockRoute} navigation={mockNavigation} />
+            </NavigationContainer>
         );
 
         // Check patient data
@@ -76,15 +80,16 @@ describe('PatientDetailPage', () => {
         expect(getByText('75 bpm')).toBeTruthy();
     });
 
-    it('navigate to Add Measurement page when clicking Add button', async () => {
+    it('navigates to Add Measurement page when clicking Add button', async () => {
         const mockPatient = { _id: '123456', patientId: 'PA001', name: 'John Doe' };
         const mockClinicalData = [];
 
-        fetch
-            .mockResolvedValueOnce({ ok: true, json: async () => ({ patient: mockPatient }) })
+        fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ patient: mockPatient }) })
             .mockResolvedValueOnce({ ok: true, json: async () => mockClinicalData });
 
-        const { findByTestId } = render(<PatientDetailPage route={mockRoute} navigation={{ navigate: mockNavigate }} />);
+        const { findByTestId } = render(
+            <PatientDetailPage route={mockRoute} navigation={mockNavigation} />
+        );
 
         const addButton = await findByTestId('add-measurement');
         fireEvent.press(addButton);
@@ -94,16 +99,17 @@ describe('PatientDetailPage', () => {
         });
     });
 
-    it('navigate to Edit Patient page when clicking Edit button', async () => {
-        // Mock patient data
+    it('navigates to Edit Patient page when clicking Edit button', async () => {
         const mockPatient = { _id: '123456', patientId: 'PA001', name: 'John Doe', age: 35, gender: 'Male' };
         const mockClinicalData = [];
 
-        fetch
-            .mockResolvedValueOnce({ ok: true, json: async () => ({ patient: mockPatient }) })
+        fetch.mockResolvedValueOnce({ ok: true, json: async () => ({ patient: mockPatient }) })
             .mockResolvedValueOnce({ ok: true, json: async () => mockClinicalData });
 
-        const { findByTestId } = render(<PatientDetailPage route={mockRoute} navigation={{ navigate: mockNavigate }} />);
+        const { findByTestId } = render(
+            <PatientDetailPage route={mockRoute} navigation={mockNavigation} />
+        );
+
         const editButton = await findByTestId('edit-patient');
         fireEvent.press(editButton);
 

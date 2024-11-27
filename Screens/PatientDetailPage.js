@@ -79,8 +79,10 @@ export default function PatientDetailPage({ route, navigation }) {
           <View style={styles.profileContainer}>
             {/* Use the temporary patient photo here, the image url will be stored in the DB */}
             <Image 
-              source={require('../assets/patient-photo.jpg')}
+              source={{ uri: patient.photoUrl }}
               style={styles.photo}
+              resizeMode="cover"
+              onError={(error) => console.error('Error loading image:', error.nativeEvent.error)}
             />
 
             {/* Display profile details */}

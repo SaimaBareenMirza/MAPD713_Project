@@ -7,12 +7,29 @@ const Patient = require('./models/Patient');
 const User = require('./models/user');
 const bcrypt = require('bcrypt');
 const Clinical = require('./models/Clinical');
+const multer = require('multer');
+const { Storage } = require('@google-cloud/storage');
 
 const app = express();
 const PORT = 3000;
 
 app.use(cors());
 app.use(express.json());
+
+// Initialize GCP Storage
+const storage = new Storage({
+  keyFilename: './gcp-key.json',
+  projectId: 'dauntless-gate-423902-a1',
+});
+
+// Define the bucket
+const bucketName = 'mapd712';
+const bucket = storage.bucket(bucketName);
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 }, // Limit the file size is 5MB
+});
 
 // Connect to patient_db
 const patientDB = mongoose.createConnection('mongodb://localhost:27017/patient_db', {
@@ -44,11 +61,49 @@ app.get('/patients/:id', async (req, res) => {
   }
 });
 
+// Image upload route
+app.post('/upload', upload.single('photo'), async (req, res) => {
+  // Check if the file uploaded
+  if (!req.file) {
+      return res.status(400).json({ message: 'No photo uploaded' });
+  }
+
+  try {
+    // Set the file name and its directory
+    // patient-photos is a directory used to store patient's photo in the bucket of GCP
+    const blob = bucket.file(`patient-photos/${Date.now()}-${req.file.originalname}`);
+
+    // Create a write stream and upload the photo to GCP Storage
+    const blobStream = blob.createWriteStream({
+        metadata: {
+            contentType: req.file.mimetype,
+        },
+    });
+
+    // Handle the event if fail to upload the photo
+    blobStream.on('error', (err) => {
+        console.error('Upload error:', err);
+        res.status(500).json({ message: 'Failed to upload the photo', error: err.message });
+    });
+
+    // Handle the event after finish uploading
+    blobStream.on('finish', async () => {
+        const publicUrl = `https://storage.googleapis.com/${bucketName}/${blob.name}`;
+        res.status(200).json({ message: 'Photo uploaded successfully', url: publicUrl });
+    });
+
+    // Write the buffer of the photo to the stream
+    blobStream.end(req.file.buffer);
+  } catch (error) {
+    console.error('Error uploading photo:', error);
+    res.status(500).json({ message: 'Internal server error', error: error.message });
+  }
+});
+
 // Add a new Patient
 app.post('/patients', async (req, res) => {
   // Get the values from body
   const {
-    patientId,
     name,
     age,
     gender,
@@ -60,7 +115,8 @@ app.post('/patients', async (req, res) => {
     emergencyContactPhone,
     medicalHistory,
     allergies,
-    bloodType
+    bloodType,
+    photoUrl,
   } = req.body;
 
   try {
@@ -92,7 +148,8 @@ app.post('/patients', async (req, res) => {
       emergencyContactPhone,
       medicalHistory,
       allergies,
-      bloodType
+      bloodType,
+      photoUrl,
     });
 
     // Store to database

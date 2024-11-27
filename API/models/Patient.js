@@ -16,6 +16,7 @@ const patientSchema = new mongoose.Schema({
   medicalHistory: { type: String, default: 'N/A' },
   allergies: { type: String, default: 'N/A' },
   bloodType: { type: String, default: 'N/A' },
+  photoUrl: { type: String },
 });
 
 module.exports = mongoose.model('Patient', patientSchema);

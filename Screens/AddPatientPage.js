@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Text, TextInput, StyleSheet, View, TouchableOpacity, ScrollView, Alert } from "react-native";
+import { Text, TextInput, StyleSheet, View, TouchableOpacity, ScrollView, Alert, Image } from "react-native";
 import { Picker } from '@react-native-picker/picker';
 import { CheckBox } from 'react-native-elements';
+import * as ImagePicker from 'expo-image-picker';
 
 export default function AddPatientPage({ navigation }) {
     const [name, setName] = useState("");
@@ -15,11 +16,43 @@ export default function AddPatientPage({ navigation }) {
     const [medical, setMedical] = useState("");
     const [allergy, setAllergy] = useState("");
     const [bloodType, setBloodType] = useState("");
+    const [photo, setPhoto] = useState(null);
 
     const bloodTypes = ["O+", "O-", "A+", "A-", "B+", "B-", "AB+", "AB-"];
 
     const createNewPatient = async() => {
+        let photoUrl = null;
+
         try {
+            if (photo) {
+                // Create a FormData
+                const formData = new FormData();
+                formData.append("photo", {
+                    uri: photo,
+                    name: "patient-photo.jpg", // The file name uploaded to GCP
+                    type: "image/jpeg",
+                });
+
+                // Upload patient's photo
+                const uploadResponse = await fetch("http://localhost:3000/upload", {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                });
+
+                // Get the photo URL from API
+                const uploadResult = await uploadResponse.json();
+
+                if (!uploadResponse.ok) {
+                    throw new Error(uploadResult.message || "Failed to upload image.");
+                }
+
+                // Store the photo URL
+                photoUrl = uploadResult.url;
+            }
+
             const response = await fetch("http://localhost:3000/patients", {
                 method: "POST",
                 headers: {
@@ -37,7 +70,8 @@ export default function AddPatientPage({ navigation }) {
                     emergencyContactPhone: emergencyContact,
                     medicalHistory: medical,
                     allergies: allergy,
-                    bloodType
+                    bloodType,
+                    photoUrl
                 })
             });
     
@@ -58,8 +92,47 @@ export default function AddPatientPage({ navigation }) {
         return;
     };
 
+    const pickImage = async () => {
+        try {
+            // Request to get the permission to access the media library
+            const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+            // If the user doesn't grant the permission, return and exit
+            if (!permissionResult.granted) {
+                alert("Permission to access media library is required!");
+                return;
+            }
+
+            // If get the permission to access the media library, open it
+            const result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images, // Only image allow
+            });
+
+            // If the user selected a photo, store the uri
+            if (!result.canceled) {
+                const uri = result.assets[0].uri;
+                setPhoto(uri);
+            }
+        } catch (error) {
+            console.error("Error picking image:", error);
+            alert("An error occurred while picking the image.");
+        }
+    };
+
     return (
         <ScrollView contentContainerStyle={styles.scrollView}>
+            {/* Upload Photo */}
+            <View style={styles.View}>
+                {photo && <Image source={{ uri: photo }} style={styles.previewImage} />}
+                <TouchableOpacity style={styles.uploadButton} onPress={pickImage}>
+                    <Text style={styles.uploadButtonText}>Upload Photo</Text>
+                </TouchableOpacity>
+            </View>
+
+            <View style={styles.View}>
+                {photo && <Text style={{color: "#007BFF"}}>Upload photo successfully!</Text>}
+            </View>
+            
             {/* Name */}
             <View style={styles.View}>
                 <Text style={styles.label}>Full Name:</Text>
@@ -219,5 +292,32 @@ const styles = StyleSheet.create({
     buttonText: {
         color: '#fff',
         fontSize: 16,
+    },
+    photoContainer: {
+        width: 120,
+        height: 120,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 60,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#f0f0f0',
+    },
+    uploadButton: {
+        backgroundColor: "#007BFF",
+        padding: 10,
+        alignItems: "center",
+        borderRadius: 5,
+        marginVertical: 10,
+    },
+    uploadButtonText: {
+        color: "#fff",
+        fontSize: 14,
+    },
+    previewImage: {
+        width: 100,
+        height: 100,
+        borderRadius: 5,
+        marginVertical: 10,
     },
 });

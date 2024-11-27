@@ -174,6 +174,7 @@ app.put('/patients/:id', async (req, res) => {
     medicalHistory,
     allergies,
     bloodType,
+    photoUrl
   } = req.body;
 
   try {
@@ -191,6 +192,7 @@ app.put('/patients/:id', async (req, res) => {
         medicalHistory,
         allergies,
         bloodType,
+        photoUrl
       },
       { new: true }
     );

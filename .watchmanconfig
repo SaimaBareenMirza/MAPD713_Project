@@ -1,0 +1,4 @@
+{
+    "suppress_stack_traces": true,
+    "max_open_files": 8192
+}

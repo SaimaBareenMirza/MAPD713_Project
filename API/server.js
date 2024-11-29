@@ -100,7 +100,7 @@ app.post('/upload', upload.single('photo'), async (req, res) => {
   }
 });
 
-// Add a new Patient
+// Add a new patient
 app.post('/patients', async (req, res) => {
   // Get the values from body
   const {
@@ -160,6 +160,7 @@ app.post('/patients', async (req, res) => {
   }
 });
 
+// Update a patient
 app.put('/patients/:id', async (req, res) => {
   const { id } = req.params;
   const {
@@ -205,6 +206,28 @@ app.put('/patients/:id', async (req, res) => {
   } catch (error) {
     console.error("Error updating patient:", error);
     res.status(500).json({ message: "Internal server error." });
+  }
+});
+
+// Delete a patient by ID
+app.delete('/patients/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Find the patient by ID and delete it
+    const deletedPatient = await PatientModel.findByIdAndDelete(id);
+
+    if (!deletedPatient) {
+      // If the patient does not exist, return a 404 response
+      return res.status(404).json({ message: 'Patient not found.' });
+    }
+
+    // Return a success response
+    res.status(200).json({ message: 'Patient deleted successfully.' });
+  } catch (error) {
+    console.error('Error deleting patient:', error);
+    // Handle any server errors
+    res.status(500).json({ message: 'Internal server error.' });
   }
 });
 

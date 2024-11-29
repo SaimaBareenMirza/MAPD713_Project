@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, Alert } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SearchBar from "../Components/SearchBar";
@@ -80,9 +80,51 @@ export default function PatientListPage({ navigation }) {
         >
           <MaterialCommunityIcons name="account-details" size={20} color="#007BFF" testID="account-details" />
         </TouchableOpacity>
+
+        {/* Delete Icon */}
+        <TouchableOpacity
+          onPress={() => deletePatient(item._id)}
+          accessibilityRole="button"
+          accessibilityLabel="delete-patient"
+        >
+          <Ionicons name="trash-bin" size={20} color="#FF0000" />
+        </TouchableOpacity>
       </View>
     </View>
   );
+
+  // Delete patient
+  const deletePatient = (patientId) => {
+    Alert.alert(
+      'Delete Patient',
+      'Are you sure you want to delete this patient?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              const response = await fetch(`http://localhost:3000/patients/${patientId}`, {
+                method: 'DELETE',
+              });
+
+              if (response.ok) {
+                // Update the patient list
+                setPatients((prevPatients) => prevPatients.filter((patient) => patient._id !== patientId));
+                Alert.alert('Success', 'Patient deleted successfully.');
+              } else {
+                Alert.alert('Error', 'Failed to delete patient.');
+              }
+            } catch (error) {
+              console.error('Error deleting patient:', error);
+              Alert.alert('Error', 'An error occurred while deleting the patient.');
+            }
+          },
+        },
+      ]
+    );
+  };
   
   return (
     <>

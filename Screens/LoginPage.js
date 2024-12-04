@@ -1,12 +1,10 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Alert } from 'react-native';
-import { CheckBox } from 'react-native-elements';
 
 export default function LoginPage({ navigation }) {
   // Set remember me as false
-  const [rememberMe, setRememberMe] = React.useState(false);
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const [ email, setEmail ] = React.useState('');
+  const [ password, setPassword ] = React.useState('');
 
   const handleLogin = () => {
     if (email === '' || password === '') {
@@ -42,20 +40,17 @@ export default function LoginPage({ navigation }) {
       <View style={styles.imageContainer}>
         <Image source={require('../assets/Logo.png')} style={styles.logo} />
       </View>
+
+      {/* Form */}
       <View style={styles.formContainer}>
         <Text style={styles.titleText}>Welcome</Text>
         <Text style={styles.text}>Sign into your Account</Text>
+
         <TextInput style={styles.input} placeholder="Email" onChangeText={setEmail} />
         <TextInput style={styles.input} placeholder="Password" secureTextEntry={true} onChangeText={setPassword} />
         
-        {/* Remember Me and Forgot Password */}
-        <View style={styles.rememberForgotContainer}>
-          <CheckBox
-            title="Remember Me"
-            checked={rememberMe}
-            onPress={() => setRememberMe(!rememberMe)}
-            containerStyle={styles.checkboxContainer}
-          />
+        {/* Forgot Password */}
+        <View style={styles.ForgotContainer}>
           <TouchableOpacity onPress={() => navigation.navigate('Forgot Password')}>
             <Text style={styles.forgotPasswordText}>Forgot password?</Text>
           </TouchableOpacity>
@@ -105,17 +100,12 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     paddingHorizontal: 10,
   },
-  rememberForgotContainer: {
+  ForgotContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
     alignItems: 'center',
     marginBottom: 20,
-  },
-  checkboxContainer: {
-    backgroundColor: 'transparent',
-    borderWidth: 0,
-    padding: 0,
   },
   forgotPasswordText: {
     color: 'blue',

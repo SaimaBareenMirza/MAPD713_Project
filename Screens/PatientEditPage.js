@@ -25,6 +25,27 @@ export default function PatientEditPage({ route, navigation }) {
     const editPatient = async () => {
         let photoUrl = null;
 
+        // Validate phone number and emergency contact
+        const phoneRegex = /^[0-9]{10}$/;
+
+        if (!phoneRegex.test(phone)) {
+            Alert.alert("Validation Error", "Phone number must be 10 digits.");
+            return;
+        }
+
+        if (!phoneRegex.test(emergencyContact)) {
+            Alert.alert("Validation Error", "Emergency contact must be 10 digits.");
+            return;
+        }
+
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Basic email format regex
+        
+        if (!emailRegex.test(email)) {
+            Alert.alert("Validation Error", "Invalid email format.");
+            return;
+        }
+
         try {
             if (photo) {
                 // Create a FormData
@@ -101,7 +122,7 @@ export default function PatientEditPage({ route, navigation }) {
 
             // If the user doesn't grant the permission, return and exit
             if (!permissionResult.granted) {
-                alert("Permission to access media library is required!");
+                Alert.alert("Permission to access media library is required!");
                 return;
             }
 
@@ -117,7 +138,7 @@ export default function PatientEditPage({ route, navigation }) {
             }
         } catch (error) {
             console.error("Error picking image:", error);
-            alert("An error occurred while picking the image.");
+            Alert.alert("An error occurred while picking the image.");
         }
     };
 

@@ -61,7 +61,17 @@ export default function AddMeasurementPage({ route, navigation }) {
     const handleSubmit = async () => {
         // Check all fields are filled in
         if (!test || !value1 || (test === "Blood Pressure" && !value2)) {
-            alert("Please fill in all required fields.");
+            Alert.alert("Please fill in all required fields.");
+            return;
+        }
+
+        // Format the input value to float
+        const parsedValue1 = parseInt(value1);
+        const parsedValue2 = test === "Blood Pressure" ? parseInt(value2) : null;
+
+        // Check the value is numeric
+        if (isNaN(parsedValue1) || (test === "Blood Pressure" && isNaN(parsedValue2))) {
+            Alert.alert("Please enter valid numeric values.");
             return;
         }
 

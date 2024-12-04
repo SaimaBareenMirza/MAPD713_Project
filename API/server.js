@@ -222,6 +222,9 @@ app.delete('/patients/:id', async (req, res) => {
       return res.status(404).json({ message: 'Patient not found.' });
     }
 
+    // Delete all clinical data associated with the patient
+    await ClinicalModel.deleteMany({ patient_id: id });
+
     // Return a success response
     res.status(200).json({ message: 'Patient deleted successfully.' });
   } catch (error) {

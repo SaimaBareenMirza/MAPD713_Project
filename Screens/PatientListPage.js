@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, FlatList, TouchableOpacity, Alert } from 'react
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SearchBar from "../Components/SearchBar";
-import { useRoute } from '@react-navigation/native';
+import { useRoute, useFocusEffect } from '@react-navigation/native';
 
 export default function PatientListPage({ navigation }) {
   const [searchTerm, setSearchTerm] = useState('');
@@ -13,7 +13,7 @@ export default function PatientListPage({ navigation }) {
   
   // Load data from database
   // If it shows Error fetching patients: [TypeError: Network request failed], try changing localhost to IP
-  useEffect(() => {
+  const fetchPatients = () => {
     fetch('http://localhost:3000/patients')
       .then((response) => response.json())
       .then((data) => {
@@ -21,14 +21,18 @@ export default function PatientListPage({ navigation }) {
         setOriginalList(sortPatientsByCondition([...data]));
       })
       .catch((error) => console.error('Error fetching patients:', error));
+  }
+
+  useEffect(() => {
+    fetchPatients();
   }, []);
 
-  // Show the existing patient list and the new patient
-  useEffect(() => {
-    if (route.params?.newPatient) {
-        setPatients(prevPatients => [route.params.newPatient, ...prevPatients]);
-    }
-}, [route.params?.newPatient]);
+  // Refresh the patient list when returning to this page
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchPatients();
+    }, [])
+  );
 
   const filterPatients = (nameToSearch) => {
     if (nameToSearch == '') {

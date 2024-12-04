@@ -104,9 +104,8 @@ export default function AddMeasurementPage({ route, navigation }) {
             console.error("Error adding measurement:", error);
             Alert.alert("Failed to add measurement. Please try again.");
         }
-        
-        
     };
+
     const togglePicker = (mode) => {
         setPickerMode(mode);
         setShowPicker(true);
@@ -137,32 +136,26 @@ export default function AddMeasurementPage({ route, navigation }) {
 
             {renderInputFields()}
             <View style={styles.DateTime}>
-            <TouchableOpacity
+                <TouchableOpacity
                     style={styles.dateTimeButton}
                     onPress={() => togglePicker("date")}>
                     <Text style={styles.label}>{`Date: ${date.toLocaleDateString()}`}</Text>
                 </TouchableOpacity>
-                {/* <Text style={styles.dateTimeText}>{date.toDateString()}</Text> */}
-                </View>
+            </View>
 
-                <View style={styles.DateTime}>
+            <View style={styles.DateTime}>
                 <TouchableOpacity
                     onPress={() => togglePicker("time")}>
                     <Text style={styles.label}>{`Time: ${date.toLocaleTimeString()}`}</Text>
                 </TouchableOpacity>
-                {/* <Text style={styles.dateTimeText}>
-                {`Time: ${date.toLocaleTimeString()}`} */}
-                {/* </Text> */}
-        
             </View>
 
-                    { showPicker && (
-                     <DateTimePicker
-                    value={date}
-                    mode={pickerMode}
-                    is24Hour={true}
-                    onChange={onChange} />)}
-
+            { showPicker && (
+            <DateTimePicker
+                value={date}
+                mode={pickerMode}
+                is24Hour={true}
+                onChange={onChange} />)}
 
             <TouchableOpacity 
                 onPress={handleSubmit}

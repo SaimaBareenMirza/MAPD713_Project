@@ -289,13 +289,56 @@ const ClinicalModel = clinicalDB.model('Clinical', Clinical.schema);
 
 // Add a new clinical measurement
 app.post('/clinical', async (req, res) => {
+  const { patient_id, type, value, dateTime } = req.body;
+
   const newClinical = new ClinicalModel({
     ...req.body,
-    dateTime: new Date()  // Use the current date and time
   });
 
   try {
     await newClinical.save();
+
+    // Define abnormal value thresholds
+    const abnormalThresholds = {
+      'Blood Pressure': (val) => {
+        const [systolic, diastolicWithUnit] = val.split('/');
+        const diastolic = diastolicWithUnit.split(' ')[0];
+
+        return Number(systolic) > 180 || Number(systolic) < 90 || Number(diastolic) > 120 || Number(diastolic) < 60;
+      },
+      'Respiratory Rate': (val) => {
+        const rate = val.split(' ')[0];
+        return Number(rate) < 12 || Number(rate) > 20;
+      },
+      'HeartBeat Rate': (val) => {
+        const rate = val.split(' ')[0];
+
+        return Number(rate) < 60 || Number(rate) > 100;
+      },
+      'Blood Oxygen Level': (val) => {
+        const rate = val.split(' ')[0];
+
+        return Number(rate) < 90;
+      },
+    };
+
+    // Check if the measurement is abnormal
+    const isAbnormal = abnormalThresholds[type] && abnormalThresholds[type](value);
+    console.log("isAbnormal: ", isAbnormal);
+
+    if (isAbnormal) {
+      // Update the patient's condition to "Critical" if the value is abnormal
+      const patient = await PatientModel.findByIdAndUpdate(
+        patient_id,
+        { condition: 'Critical' },
+        { new: true }
+      );
+
+      if (!patient) {
+        return res.status(404).json({ message: 'Patient not found.' });
+      }
+    }
+
     res.status(201).json(newClinical);
   } catch (err) {
     res.status(400).json({ message: err.message });

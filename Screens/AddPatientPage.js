@@ -5,17 +5,17 @@ import { CheckBox } from 'react-native-elements';
 import * as ImagePicker from 'expo-image-picker';
 
 export default function AddPatientPage({ navigation }) {
-    const [name, setName] = useState("");
-    const [age, setAge] = useState("");
-    const [gender, setGender] = useState("");
-    const [phone, setPhone] = useState("");
-    const [email, setEmail] = useState("");
-    const [address, setAddress] = useState("");
-    const [emergencyContact, setEmergencyContact] = useState("");
-    const [medical, setMedical] = useState("");
-    const [allergy, setAllergy] = useState("");
-    const [bloodType, setBloodType] = useState("");
-    const [photo, setPhoto] = useState(null);
+    const [ name, setName ] = useState("");
+    const [ age, setAge ] = useState("");
+    const [ gender, setGender ] = useState("");
+    const [ phone, setPhone ] = useState("");
+    const [ email, setEmail ] = useState("");
+    const [ address, setAddress ] = useState("");
+    const [ emergencyContact, setEmergencyContact ] = useState("");
+    const [ medical, setMedical ] = useState("");
+    const [ allergy, setAllergy ] = useState("");
+    const [ bloodType, setBloodType ] = useState("");
+    const [ photo, setPhoto ] = useState(null);
 
     const bloodTypes = ["O+", "O-", "A+", "A-", "B+", "B-", "AB+", "AB-"];
 

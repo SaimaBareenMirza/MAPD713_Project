@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
     inputStyle: {
         fontSize: 20,
         flex: 1,
-    
     }
 })
 

@@ -3,13 +3,12 @@ import { StyleSheet, Text, View, FlatList, TouchableOpacity, Alert } from 'react
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SearchBar from "../Components/SearchBar";
-import { useRoute, useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function PatientListPage({ navigation }) {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [patients, setPatients] = useState([]);
-  const [originalList, setOriginalList] = useState([]);
-  const route = useRoute();
+  const [ searchTerm, setSearchTerm ] = useState('');
+  const [ patients, setPatients ] = useState([]);
+  const [ originalList, setOriginalList ] = useState([]);
   
   // Load data from database
   // If it shows Error fetching patients: [TypeError: Network request failed], try changing localhost to IP
@@ -106,7 +105,7 @@ export default function PatientListPage({ navigation }) {
         { text: 'Cancel', style: 'cancel' },
         {
           text: 'Delete',
-          style: 'destructive',
+          style: 'destructive', // display in red color
           onPress: async () => {
             try {
               const response = await fetch(`http://localhost:3000/patients/${patientId}`, {

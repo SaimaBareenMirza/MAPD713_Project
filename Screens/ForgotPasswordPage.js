@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Text, TextInput, StyleSheet, View, TouchableOpacity, Alert } from 'react-native';
 
 export default function ForgotPasswordPage({ navigation }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = React.useState('');
+  const [ email, setEmail ] = useState('');
+  const [ password, setPassword ] = React.useState('');
 
   const handleResetPassword = async () => {
     if (!email || !password) {

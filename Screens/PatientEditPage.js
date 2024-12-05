@@ -7,18 +7,18 @@ import * as ImagePicker from 'expo-image-picker';
 export default function PatientEditPage({ route, navigation }) {
     const { patient } = route.params;
     
-    const [name, setName] = useState(patient.name);
-    const [age, setAge] = useState(patient.age ? patient.age.toString() : "");
-    const [gender, setGender] = useState(patient.gender);
-    const [condition, setCondition] = useState(patient.condition);
-    const [phone, setPhone] = useState(patient.phone);
-    const [email, setEmail] = useState(patient.email);
-    const [address, setAddress] = useState(patient.address);
-    const [emergencyContact, setEmergencyContact] = useState(patient.emergencyContactPhone);
-    const [medical, setMedical] = useState(patient.medical || "N/A");
-    const [allergy, setAllergy] = useState(patient.allergy || "N/A");
-    const [bloodType, setBloodType] = useState(patient.bloodType);
-    const [photo, setPhoto] = useState(null);
+    const [ name, setName ] = useState(patient.name);
+    const [ age, setAge ] = useState(patient.age ? patient.age.toString() : "");
+    const [ gender, setGender ] = useState(patient.gender);
+    const [ condition, setCondition ] = useState(patient.condition);
+    const [ phone, setPhone ] = useState(patient.phone);
+    const [ email, setEmail ] = useState(patient.email);
+    const [ address, setAddress ] = useState(patient.address);
+    const [ emergencyContact, setEmergencyContact ] = useState(patient.emergencyContactPhone);
+    const [ medical, setMedical ] = useState(patient.medical || "N/A");
+    const [ allergy, setAllergy ] = useState(patient.allergy || "N/A");
+    const [ bloodType, setBloodType ] = useState(patient.bloodType);
+    const [ photo, setPhoto ] = useState(null);
 
     const bloodTypes = ["O+", "O-", "A+", "A-", "B+", "B-", "AB+", "AB-"];
 

@@ -8,8 +8,8 @@ export default function AddMeasurementPage({ route, navigation }) {
     const [ value1, setValue1 ] = useState(""); 
     const [ value2, setValue2 ] = useState(""); 
     const [ date, setDate ] = useState(new Date());
-    const [showPicker, setShowPicker] = useState(false);
-    const [pickerMode, setPickerMode] = useState("date");
+    const [ showPicker, setShowPicker ] = useState(false);
+    const [ pickerMode, setPickerMode ] = useState("date");
     const { patientId } = route.params;
     
     const renderInputFields = () => {

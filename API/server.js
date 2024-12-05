@@ -52,8 +52,6 @@ app.get('/patients/:id', async (req, res) => {
   try {
     const patient = await PatientModel.findById(req.params.id);
     if (!patient) return res.status(404).json({ message: "Patient not found" });
-
-    // TODO: Fetch all of this patient's clinical data
     
     res.json({ patient });
   } catch (err) {
@@ -292,7 +290,7 @@ const ClinicalModel = clinicalDB.model('Clinical', Clinical.schema);
 
 // Add a new clinical measurement
 app.post('/clinical', async (req, res) => {
-  const { patient_id, type, value, dateTime } = req.body;
+  const { patient_id, type, value } = req.body;
 
   const newClinical = new ClinicalModel({
     ...req.body,
@@ -327,7 +325,6 @@ app.post('/clinical', async (req, res) => {
 
     // Check if the measurement is abnormal
     const isAbnormal = abnormalThresholds[type] && abnormalThresholds[type](value);
-    console.log("isAbnormal: ", isAbnormal);
 
     if (isAbnormal) {
       // Update the patient's condition to "Critical" if the value is abnormal

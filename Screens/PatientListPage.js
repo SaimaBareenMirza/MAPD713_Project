@@ -13,7 +13,7 @@ export default function PatientListPage({ navigation }) {
   // Load data from database
   // If it shows Error fetching patients: [TypeError: Network request failed], try changing localhost to IP
   const fetchPatients = () => {
-    fetch('http://localhost:8080/patients')
+    fetch('http://localhost:3000/patients')
       .then((response) => response.json())
       .then((data) => {
         setPatients(sortPatientsByCondition([...data]));
@@ -108,7 +108,7 @@ export default function PatientListPage({ navigation }) {
           style: 'destructive', // display in red color
           onPress: async () => {
             try {
-              const response = await fetch(`http://localhost:8080/patients/${patientId}`, {
+              const response = await fetch(`http://localhost:3000/patients/${patientId}`, {
                 method: 'DELETE',
               });
 

@@ -25,7 +25,7 @@ import dotenv from 'dotenv';
 //const swaggerUi = require('swagger-ui-express');
 
 const app = express();
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
@@ -56,7 +56,7 @@ const swaggerOptions = {
     },
     servers: [
       {
-        //url: 'http://localhost:8080',
+        //url: 'http://localhost:3000',
         url: 'https://mapd713project-g3aaaygvf2awetcx.canadacentral-01.azurewebsites.net/',
       },
     ],

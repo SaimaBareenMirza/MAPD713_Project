@@ -1,5 +1,5 @@
 // server.js
-
+//import express from 'express';
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -13,7 +13,7 @@ const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 
 const app = express();
-const PORT = process.env.port || 8080;
+const PORT = process.env.PORT || 8080;
 
 app.use(cors());
 app.use(express.json());

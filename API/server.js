@@ -1,16 +1,28 @@
 // server.js
-//import express from 'express';
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const Patient = require('./models/Patient');
-const User = require('./models/user');
-const bcrypt = require('bcrypt');
-const Clinical = require('./models/Clinical');
-const multer = require('multer');
-const { Storage } = require('@google-cloud/storage');
-const swaggerJsDoc = require('swagger-jsdoc');
-const swaggerUi = require('swagger-ui-express');
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import Patient from './models/Patient.js';
+import User from './models/User.js';
+import Clinical from './models/Clinical.js';
+import bcrypt from 'bcrypt';
+import multer from 'multer';
+import { Storage } from '@google-cloud/storage';
+import swaggerJsDoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
+import bodyParser from 'body-parser';
+import dotenv from 'dotenv';
+//const express = require('express');
+//const mongoose = require('mongoose');
+//const cors = require('cors');
+//const Patient = require('./models/Patient');
+//const User = require('./models/user');
+//const bcrypt = require('bcrypt');
+//const Clinical = require('./models/Clinical');
+//const multer = require('multer');
+//const { Storage } = require('@google-cloud/storage');
+//const swaggerJsDoc = require('swagger-jsdoc');
+//const swaggerUi = require('swagger-ui-express');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -44,7 +56,8 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: 'http://localhost:8080',
+        //url: 'http://localhost:8080',
+        url: 'https://mapd713project-g3aaaygvf2awetcx.canadacentral-01.azurewebsites.net/',
       },
     ],
     components: {
@@ -83,7 +96,13 @@ const swaggerOptions = {
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use(bodyParser.json());
+app.use(cors({
+  origin:["https://mapd713project-g3aaaygvf2awetcx.canadacentral-01.azurewebsites.net/"]
+}))
+
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+dotenv.config();
 
 // Connect to patient_db
 const patientDB = mongoose.createConnection('mongodb://localhost:27017/patient_db', {

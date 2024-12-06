@@ -90,6 +90,11 @@ const patientDB = mongoose.createConnection('mongodb://localhost:27017/patient_d
   connectTimeoutMS: 20000,
 });
 const PatientModel = patientDB.model('Patient', Patient.schema);
+
+app.get('/', (req,res) => {
+  res.send("Hello world One")
+});
+
 /**
  * @swagger
  * /patients:

@@ -11,7 +11,7 @@ const multer = require('multer');
 const { Storage } = require('@google-cloud/storage');
 
 const app = express();
-const PORT = 3000;
+const PORT = 8080;
 
 app.use(cors());
 app.use(express.json());

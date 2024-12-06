@@ -113,7 +113,7 @@ describe('PatientEditPage', () => {
     fireEvent.press(getByText('Submit'));
 
     await waitFor(() => {
-      expect(fetch).toHaveBeenCalledWith(`http://localhost:3000/patients/${mockPatient._id}`,
+      expect(fetch).toHaveBeenCalledWith(`http://localhost:8080/patients/${mockPatient._id}`,
         expect.objectContaining({
           method: 'PUT',
           body: JSON.stringify({
@@ -153,7 +153,7 @@ describe('PatientEditPage', () => {
     fireEvent.press(getByText('Submit'));
   
     await waitFor(() => {
-      expect(fetch).toHaveBeenCalledWith(`http://localhost:3000/patients/${mockPatient._id}`, expect.any(Object));
+      expect(fetch).toHaveBeenCalledWith(`http://localhost:8080/patients/${mockPatient._id}`, expect.any(Object));
       expect(mockNavigate).not.toHaveBeenCalled();
     });
   });  

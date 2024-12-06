@@ -147,7 +147,7 @@ describe('LoginPage', () => {
         fireEvent.press(getByText('Login'));
       
         await waitFor(() => {
-            expect(global.fetch).toHaveBeenCalledWith('http://localhost:3000/login', {
+            expect(global.fetch).toHaveBeenCalledWith('http://localhost:8080/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

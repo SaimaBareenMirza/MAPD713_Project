@@ -54,7 +54,7 @@ export default function AddPatientPage({ navigation }) {
                 });
 
                 // Upload patient's photo
-                const uploadResponse = await fetch("http://localhost:3000/upload", {
+                const uploadResponse = await fetch("http://localhost:8080/upload", {
                     method: "POST",
                     body: formData,
                     headers: {
@@ -73,7 +73,7 @@ export default function AddPatientPage({ navigation }) {
                 photoUrl = uploadResult.url;
             }
 
-            const response = await fetch("http://localhost:3000/patients", {
+            const response = await fetch("http://localhost:8080/patients", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

@@ -173,7 +173,7 @@ describe('AddPatientPage', () => {
 
         // Wait for the error message
         await waitFor(() => {
-            expect(fetch).toHaveBeenCalledWith('http://localhost:3000/patients', expect.any(Object));
+            expect(fetch).toHaveBeenCalledWith('http://localhost:8080/patients', expect.any(Object));
             expect(mockNavigate).not.toHaveBeenCalled();
         });
     });

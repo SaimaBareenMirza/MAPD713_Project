@@ -9,6 +9,8 @@ const bcrypt = require('bcrypt');
 const Clinical = require('./models/Clinical');
 const multer = require('multer');
 const { Storage } = require('@google-cloud/storage');
+const swaggerJsDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 
 const app = express();
 const PORT = 8080;
@@ -31,11 +33,78 @@ const upload = multer({
   limits: { fileSize: 5 * 1024 * 1024 }, // Limit the file size is 5MB
 });
 
+// Set up swagger
+const swaggerOptions = {
+  swaggerDefinition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Patient Data REST API',
+      version: '1.0.0',
+      description: 'A REST API Service for a Patient Clinical Data management application for the health care providers in the hospital',
+    },
+    servers: [
+      {
+        url: 'http://localhost:3000',
+      },
+    ],
+    components: {
+      schemas: {
+        Patient: {
+          type: 'object',
+          properties: {
+            patientId: { type: 'string' },
+            name: { type: 'string' },
+            age: { type: 'integer' },
+            gender: { type: 'string' },
+            admissionDate: { type: 'string', format: 'date' },
+            condition: { type: 'string' },
+            phone: { type: 'string' },
+            email: { type: 'string' },
+            address: { type: 'string' },
+            emergencyContactPhone: { type: 'string' },
+            medicalHistory: { type: 'string' },
+            allergies: { type: 'string' },
+            bloodType: { type: 'string' },
+          },
+        },
+        Clinical: {
+          type: 'object',
+          properties: {
+            patient_id: { type: 'string' },
+            type: { type: 'string' },
+            value: { type: 'string' },
+            dateTime: { type: 'string', format: 'date-time' },
+          },
+        },
+      },
+    },
+  },
+  apis: ['./server.js'],
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
 // Connect to patient_db
 const patientDB = mongoose.createConnection('mongodb://localhost:27017/patient_db', {
   connectTimeoutMS: 20000,
 });
 const PatientModel = patientDB.model('Patient', Patient.schema);
+/**
+ * @swagger
+ * /patients:
+ *   get:
+ *     summary: Get all patients
+ *     responses:
+ *       200:
+ *         description: List of all patients
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Patient'
+ */
 
 // Get all patients
 app.get('/patients', async (req, res) => {
@@ -46,6 +115,29 @@ app.get('/patients', async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
+/**
+ * @swagger
+ * /patients/{id}:
+ *   get:
+ *     summary: Get a single patient with clinical data
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The patient ID
+ *     responses:
+ *       200:
+ *         description: Patient data and clinical measurements
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Patient'
+ *       404:
+ *         description: Patient not found
+ */
 
 // Get a single patient with clinical data
 app.get('/patients/:id', async (req, res) => {
@@ -97,6 +189,24 @@ app.post('/upload', upload.single('photo'), async (req, res) => {
     res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 });
+
+/**
+ * @swagger
+ * /patients:
+ *   post:
+ *     summary: Add a new patient
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Patient'
+ *     responses:
+ *       201:
+ *         description: Patient created successfully
+ *       400:
+ *         description: Patient ID already exists
+ */
 
 // Add a new patient
 app.post('/patients', async (req, res) => {
@@ -288,6 +398,24 @@ app.post('/reset-password', async (req, res) => {
 const clinicalDB = mongoose.createConnection('mongodb://localhost:27017/clinical_db');
 const ClinicalModel = clinicalDB.model('Clinical', Clinical.schema);
 
+/**
+ * @swagger
+ * /clinical:
+ *   post:
+ *     summary: Add a new clinical measurement
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Clinical'
+ *     responses:
+ *       201:
+ *         description: Clinical measurement created successfully
+ *       400:
+ *         description: Error in creating clinical measurement
+ */
+
 // Add a new clinical measurement
 app.post('/clinical', async (req, res) => {
   const { patient_id, type, value } = req.body;
@@ -344,6 +472,25 @@ app.post('/clinical', async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 });
+
+/**
+ * @swagger
+ * /clinical/{patientId}:
+ *   get:
+ *     summary: Get clinical measurements for a specific patient
+ *     parameters:
+ *       - in: path
+ *         name: patientId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The patient ID
+ *     responses:
+ *       200:
+ *         description: List of clinical measurements
+ *       404:
+ *         description: No clinical measurement found
+ */
 
 // Get clinical measurements for a specific patient
 app.get('/clinical/:patientId', async (req, res) => {

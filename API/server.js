@@ -45,7 +45,7 @@ const swaggerOptions = {
     servers: [
       {
         //url: 'http://localhost:3000',
-        url: 'https://mapd713project-g3aaaygvf2awetcx.canadacentral-01.azurewebsites.net/',
+        url: 'https://mapd713apiproject-c5ghd7c3hreva7ex.canadacentral-01.azurewebsites.net/',
       },
     ],
     components: {
@@ -86,7 +86,7 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use(bodyParser.json());
 app.use(cors({
-  origin:["https://mapd713project-g3aaaygvf2awetcx.canadacentral-01.azurewebsites.net/"]
+  origin:["https://mapd713apiproject-c5ghd7c3hreva7ex.canadacentral-01.azurewebsites.net/"]
 }))
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));

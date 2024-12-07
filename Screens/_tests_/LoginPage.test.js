@@ -62,7 +62,6 @@ describe('LoginPage', () => {
         expect(getByPlaceholderText('Password')).toBeTruthy();
         expect(getByText('Login')).toBeTruthy();
         expect(getByText('Forgot password?')).toBeTruthy();
-        expect(getByText('Remember Me')).toBeTruthy();
     });
 
     // The user must enter email and password

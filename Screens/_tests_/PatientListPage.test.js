@@ -7,6 +7,7 @@ const mockNavigate = jest.fn();
 jest.mock('@react-navigation/native', () => ({
     useRoute: () => ({ params: {} }),
     useNavigation: () => ({ navigate: mockNavigate }),
+    useFocusEffect: jest.fn(),
 }));
 
 // Mock SearchBar component

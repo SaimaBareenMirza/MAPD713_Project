@@ -16,8 +16,12 @@ jobs:
         with: 
           node-version: '18.x'
 
+      - name: Change directory to API
+        run: cd API
+
       - name: install dependencies
         run: npm install --legacy-peer-deps
+        working-directory: ./API
 
       - name: Deploy to Azure app Services
         uses: azure/webapps-deploy@v2

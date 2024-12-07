@@ -95,7 +95,7 @@ export default function AddMeasurementPage({ route, navigation }) {
         };
     
         try {
-            const response = await fetch("http://localhost:8080/clinical", {
+            const response = await fetch("http://localhost:8000/clinical", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

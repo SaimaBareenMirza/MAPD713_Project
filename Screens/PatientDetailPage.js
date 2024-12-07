@@ -13,7 +13,7 @@ export default function PatientDetailPage({ route, navigation }) {
   useEffect(() => {
     const fetchPatientData = async () => {
       try {
-          const response = await fetch(`http://localhost:8080/patients/${patientId}`);
+          const response = await fetch(`http://localhost:8000/patients/${patientId}`);
           if (response.ok) {
               const data = await response.json();
               setPatient(data.patient);
@@ -25,7 +25,7 @@ export default function PatientDetailPage({ route, navigation }) {
 
     const fetchClinicalData = async () => {
       try {
-        const response = await fetch(`http://localhost:8080/clinical/${patientId}`);
+        const response = await fetch(`http://localhost:8000/clinical/${patientId}`);
 
         if (response.ok) {
           const data = await response.json();

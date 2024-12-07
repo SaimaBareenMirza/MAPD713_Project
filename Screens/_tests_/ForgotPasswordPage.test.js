@@ -100,7 +100,7 @@ describe('ForgotPasswordPage', () => {
         fireEvent.press(getByText('Reset Password'));
 
         await waitFor(() => {
-            expect(global.fetch).toHaveBeenCalledWith('http://localhost:8080/reset-password', {
+            expect(global.fetch).toHaveBeenCalledWith('http://localhost:8000/reset-password', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: 'admin@example.com', newPassword: 'newAdmin123' }),

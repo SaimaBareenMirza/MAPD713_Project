@@ -92,7 +92,7 @@ describe('AddMeasurementPage', () => {
 
         // Check fetch was called correctly
         await waitFor(() => {
-            expect(fetch).toHaveBeenCalledWith('http://localhost:8080/clinical', expect.any(Object));
+            expect(fetch).toHaveBeenCalledWith('http://localhost:8000/clinical', expect.any(Object));
             expect(mockNavigate).toHaveBeenCalledWith('Patient Detail', {
                 patientId: '12345',
                 refresh: true,
@@ -121,7 +121,7 @@ describe('AddMeasurementPage', () => {
 
         // Check error alert
         await waitFor(() => {
-            expect(fetch).toHaveBeenCalledWith('http://localhost:8080/clinical', expect.any(Object));
+            expect(fetch).toHaveBeenCalledWith('http://localhost:8000/clinical', expect.any(Object));
             expect(mockNavigate).not.toHaveBeenCalled();
         });
 

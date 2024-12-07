@@ -103,7 +103,7 @@ mongoose.connect(mongourl).then(()=>{
 app.use("/api/patients", Patient);
 
 // Connect to patient_db
-const patientDB = mongoose.createConnection('mongodb://localhost:27017/patient_db', {
+const patientDB = mongoose.createConnection(process.env.MONGO_URL, {
   connectTimeoutMS: 20000,
 });
 const PatientModel = patientDB.model('Patient', Patient.schema);
@@ -467,7 +467,7 @@ app.delete('/patients/:id', async (req, res) => {
 });
 
 // Connect to user_db
-const userDB = mongoose.createConnection('mongodb://localhost:27017/user_db');
+const userDB = mongoose.createConnection(process.env.MONGO_URL);
 const UserModel = userDB.model('User', User.schema);
 
 /**
@@ -569,7 +569,7 @@ app.post('/reset-password', async (req, res) => {
 });
 
 // Connect to user_db
-const clinicalDB = mongoose.createConnection('mongodb://localhost:27017/clinical_db');
+const clinicalDB = mongoose.createConnection(process.env.MONGO_URL);
 const ClinicalModel = clinicalDB.model('Clinical', Clinical.schema);
 
 /**

@@ -24,4 +24,4 @@ jobs:
         with: 
           app-name: MAPD713APIProject
           publish-profile: ${{ secrets.MAPD713_PROJECT_SECRET }}
-          package: ./API
+          package: .

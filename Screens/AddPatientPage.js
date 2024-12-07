@@ -54,7 +54,7 @@ export default function AddPatientPage({ navigation }) {
                 });
 
                 // Upload patient's photo
-                const uploadResponse = await fetch("http://localhost:3000/upload", {
+                const uploadResponse = await fetch("http://localhost:5000/upload", {
                     method: "POST",
                     body: formData,
                     headers: {

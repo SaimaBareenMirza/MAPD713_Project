@@ -12,20 +12,8 @@ import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
-//const express = require('express');
-//const mongoose = require('mongoose');
-//const cors = require('cors');
-//const Patient = require('./models/Patient');
-//const User = require('./models/user');
-//const bcrypt = require('bcrypt');
-//const Clinical = require('./models/Clinical');
-//const multer = require('multer');
-//const { Storage } = require('@google-cloud/storage');
-//const swaggerJsDoc = require('swagger-jsdoc');
-//const swaggerUi = require('swagger-ui-express');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
@@ -103,6 +91,16 @@ app.use(cors({
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 dotenv.config();
+
+const PORT = process.env.PORT || 8000;
+const mongourl = process.env.MONGO_URL;
+mongoose.connect(mongourl).then(()=>{
+    console.log("Connection success");
+    app.listen(PORT, '0.0.0.0', () => {
+        console .log(`Server is running on port ${PORT}`)
+    })
+}).catch((error) => console.log(error));
+app.use("/api/patients", Patient);
 
 // Connect to patient_db
 const patientDB = mongoose.createConnection('mongodb://localhost:27017/patient_db', {
@@ -291,7 +289,91 @@ app.post('/patients', async (req, res) => {
     res.status(500).json({ message: 'Server error', error: err.message });
   }
 });
-
+/**
+* @swagger
+* /patients/{id}:
+*   put:
+*     summary: Update an existing patient
+*     parameters: 
+*       - in: path
+*         name: patientId
+*         required: true
+*         schema:
+*           type: string
+*         description: The patient ID
+*     requestBody:
+*       required: true
+*       content:
+*         application/json:
+*           schema:
+*             type: object
+*             properties:
+*               name: 
+*                 type: string
+*               age: 
+*                 type: string
+*               gender:
+*                 type: string
+*               condition:
+*                 type: string
+*               phone: 
+*                 type: string
+*               email:
+*                 type: string
+*               address:
+*                 type: string
+*               emergencyContactPhone:
+*                 type: string
+*               medicalHistory:
+*                 type: string
+*               allergies: 
+*                 type: string
+*               bloodType:
+*                 type: string
+*               photoUrl:
+*                 type: string
+*     responses:
+*       200:
+*         description: Patient updated successfully
+*         content:
+*           application/json:
+*             schema:
+*               type: object
+*               properties: 
+*                 message:
+*                   type: string
+*                 patient:
+*                   type: object
+*                   properties:
+*                     name: 
+*                       type: string
+*                     age: 
+*                       type: string
+*                     gender:
+*                       type: string
+*                     condition:
+*                       type: string
+*                     phone: 
+*                       type: string
+*                     email:
+*                       type: string
+*                     address:
+*                       type: string
+*                     emergencyContactPhone:
+*                       type: string
+*                     medicalHistory:
+*                       type: string
+*                     allergies: 
+*                       type: string
+*                     bloodType:
+*                       type: string
+*                     photoUrl:
+*                       type: string
+*       404:
+*         description: Patient not found
+*       500:
+*         description: Internal server error
+*/
 // Update a patient
 app.put('/patients/:id', async (req, res) => {
   const { id } = req.params;
@@ -341,6 +423,24 @@ app.put('/patients/:id', async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /patients/{id}:
+ *  delete:
+ *    summary: Delete an existing patient
+ *    parameters:  
+ *      - in: path
+ *        name: id
+ *        required: true
+ *        schema: 
+ *          type: string
+ *          description: Id of patient to be deleted
+ *    responses:
+ *      200: 
+ *        description: Patient deleted successfully
+ *      500:
+ *        description: Internal server error
+ */
 // Delete a patient by ID
 app.delete('/patients/:id', async (req, res) => {
   const { id } = req.params;
@@ -370,6 +470,30 @@ app.delete('/patients/:id', async (req, res) => {
 const userDB = mongoose.createConnection('mongodb://localhost:27017/user_db');
 const UserModel = userDB.model('User', User.schema);
 
+/**
+ * @swagger
+ * /login:
+ *   post:
+ *     summary: User login
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *       400:
+ *         description: Invalid email or password
+ *       500:
+ *         description: Server error
+ */
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -387,12 +511,38 @@ app.post('/login', async (req, res) => {
     }
 
     // Login successfully
-    return res.json({ message: "Login successful", user: { email: user.email, role: user.role } });
+    return res.status(200).json({ message: "Login successful", user: { email: user.email, role: user.role } });
   } catch (err) {
     return res.status(500).json({ message: "Server error" });
   }
 });
 
+/**
+ * @swagger
+ * /reset-password:
+ *   post:
+ *     summary: Reset user password
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *            type: object
+ *            properties:
+ *              email:
+ *                type: string
+ *              newPassword:
+ *                type: string
+ *     responses:
+ *       200:
+ *         description: Password reset successfully
+ *       400:
+ *         description: Email and new password are required
+ *       404:
+ *         description: Email does not exist
+ *       500:
+ *         description: Internal server error
+ */
 app.post('/reset-password', async (req, res) => {
   const { email, newPassword } = req.body;
 

@@ -92,7 +92,7 @@ app.use(cors({
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 dotenv.config();
 
-const PORT = process.env.PORT || 8080;
+//const PORT = process.env.PORT || 8080;
 const mongourl = process.env.MONGO_URL;
 mongoose.connect(mongourl).then(()=>{
     console.log("Connection success");

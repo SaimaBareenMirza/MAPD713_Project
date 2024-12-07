@@ -57,7 +57,7 @@ export default function PatientEditPage({ route, navigation }) {
                 });
 
                 // Upload patient's photo
-                const uploadResponse = await fetch("http://localhost:5000/upload", {
+                const uploadResponse = await fetch("http://localhost:8080/upload", {
                     method: "POST",
                     body: formData,
                     headers: {
@@ -92,7 +92,7 @@ export default function PatientEditPage({ route, navigation }) {
                 photoUrl
             };
 
-            const response = await fetch(`http://localhost:5000/patients/${patient._id}`, {
+            const response = await fetch(`http://localhost:8080/patients/${patient._id}`, {
               method: "PUT",
               headers: {
                 "Content-Type": "application/json",

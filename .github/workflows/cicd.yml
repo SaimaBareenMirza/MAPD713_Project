@@ -23,5 +23,5 @@ jobs:
         uses: azure/webapps-deploy@v2
         with: 
           app-name: MAPD713APIProject
-          publish-profile: ${{ secrets.MAPD713_PROJECT_SECRET }}
+          publish-profile: ${{ secrets.MAPD713_SECRET }}
           package: ./API

@@ -680,6 +680,9 @@ app.get('/clinical/:patientId', async (req, res) => {
   }
 });
 
+app.get('/health', (req, res) => res.status(200).send('OK'));
+
+
 // Catch-all route for 404
 app.use((req, res, next) => {
   res.status(404).send('Not Found');

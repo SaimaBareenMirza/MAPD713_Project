@@ -1,6 +1,7 @@
 // models/Clinical.js
 
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
+//const mongoose = require('mongoose');
 
 const clinicalSchema = new mongoose.Schema({
     patient_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Patient', required: true },
@@ -9,4 +10,6 @@ const clinicalSchema = new mongoose.Schema({
     dateTime: { type: Date, required: true },
   });
 
-  module.exports = mongoose.model('Clinical', clinicalSchema);
+  const Clinical = mongoose.model('Clinical', clinicalSchema);
+
+  export default Clinical;

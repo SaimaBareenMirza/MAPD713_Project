@@ -1,6 +1,6 @@
 // models/Patient.js
-
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
+//const mongoose = require('mongoose');
 
 const patientSchema = new mongoose.Schema({
   patientId: { type: String, unique: true, required: true },
@@ -19,4 +19,6 @@ const patientSchema = new mongoose.Schema({
   photoUrl: { type: String },
 });
 
-module.exports = mongoose.model('Patient', patientSchema);
+const Patient = mongoose.model('Patient', patientSchema);
+
+export default Patient;
